@@ -23,7 +23,7 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       body: Center(
         child: Lottie.asset(
-          'assets/lottie/loading_gun.json',
+          'lottie/loading.json',
           repeat: true,
           animate: true,
           width: 120,
@@ -37,7 +37,7 @@ class _SplashPageState extends State<SplashPage> {
 
     //Utilizamos la variable mounted para saber si la pantalla aún está activa o ya no esta.
     if (mounted) {
-      context.go(NavigationRoutes.JOKE_CATEGORIES_ROUTE);
+      context.go(NavigationRoutes.ORDERS_ROUTE);
     }
   }
 }

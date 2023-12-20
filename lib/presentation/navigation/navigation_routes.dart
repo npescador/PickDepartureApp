@@ -1,15 +1,33 @@
 import 'package:go_router/go_router.dart';
-import 'package:pick_departure_app/presentation/view/splash/splash_page.dart';
+import 'package:pick_departure_app/presentation/view/authentication/login_page.dart';
+import 'package:pick_departure_app/presentation/view/home/home_page.dart';
+import 'package:pick_departure_app/presentation/view/orders/new_order/new_order_page.dart';
+import 'package:pick_departure_app/presentation/view/orders/order_detail/order_detail_page.dart';
+import 'package:pick_departure_app/presentation/view/orders/order_list/order_list_page.dart';
+import 'package:pick_departure_app/presentation/view/orders/order_preparation/order_preparation_page.dart';
+import 'package:pick_departure_app/presentation/view/picking/picking_page.dart';
+import 'package:pick_departure_app/presentation/view/products/product_list_page.dart';
 
 class NavigationRoutes {
-  // Routes
-  static const String INITIAL_ROUTE = "/";
-  static const String JOKE_CATEGORIES_ROUTE = "/joke-categories";
-  static const String JOKE_DETAIL_ROUTE =
-      "$JOKE_CATEGORIES_ROUTE/$_JOKE_DETAIL_PATH";
+  static const INITIAL_ROUTE = "/";
 
-  // Paths
-  static const String _JOKE_DETAIL_PATH = "joke-detail";
+  static const HOME_ROUTE = "/home";
+  static const ORDERS_ROUTE = "/orders";
+  static const PRODUCTS_ROUTE = "/productos";
+  static const PICKING_ROUTE = "/picking";
+
+  static const _ORDER_DETAIL_PATH = "orderDetail";
+  static const ORDER_DETAIL_ROUTE = "$ORDERS_ROUTE/$_ORDER_DETAIL_PATH";
+
+  static const _NEW_ORDER_PATH = "newOrder";
+  static const NEW_ORDER_ROUTE = "$ORDERS_ROUTE/$_NEW_ORDER_PATH";
+
+  static const _ORDER_PREPARATION_PATH = "orderPreparation";
+  static const ORDER_PREAPARATION_ROUTE =
+      "$ORDERS_ROUTE/$_ORDER_DETAIL_PATH/$_ORDER_PREPARATION_PATH";
+
+  static const _PRODUCT_DETAIL_PATH = "productDetail";
+  static const PRODUCT_DETAIL_ROUTE = "$PRODUCTS_ROUTE/$_PRODUCT_DETAIL_PATH";
 }
 
 final GoRouter router = GoRouter(
@@ -17,17 +35,52 @@ final GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: NavigationRoutes.INITIAL_ROUTE,
-      builder: (context, state) => const SplashPage(),
+      builder: (context, state) => const LoginPage(),
     ),
-    // GoRoute(
-    //     path: NavigationRoutes.JOKE_CATEGORIES_ROUTE,
-    //     builder: (context, state) => const JokeCategoriesPage(),
-    //     routes: [
-    //       GoRoute(
-    //         path: NavigationRoutes._JOKE_DETAIL_PATH,
-    //         builder: (context, state) =>
-    //             JokeDetailPage(category: state.extra as String),
-    //       )
-    //     ])
+    StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) => HomePage(
+              navigationShell: navigationShell,
+            ),
+        branches: [
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: NavigationRoutes.ORDERS_ROUTE,
+              builder: (context, state) => const OrderListPage(),
+              routes: [
+                GoRoute(
+                  path: NavigationRoutes._ORDER_DETAIL_PATH,
+                  builder: (context, state) => const OrderDetailPage(),
+                  routes: [
+                    GoRoute(
+                      path: NavigationRoutes._ORDER_PREPARATION_PATH,
+                      builder: (context, state) => const OrderPreparationPage(),
+                    )
+                  ],
+                ),
+                GoRoute(
+                  path: NavigationRoutes._NEW_ORDER_PATH,
+                  builder: (context, state) => const NewOrderPage(),
+                )
+              ],
+            ),
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+                path: NavigationRoutes.PRODUCTS_ROUTE,
+                builder: (context, state) => const ProductsListPage())
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: NavigationRoutes.PICKING_ROUTE,
+              builder: (context, state) => const PickingPage(),
+            )
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
+              path: NavigationRoutes.PICKING_ROUTE,
+              builder: (context, state) => const PickingPage(),
+            )
+          ])
+        ]),
   ],
 );
