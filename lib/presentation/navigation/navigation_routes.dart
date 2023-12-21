@@ -1,5 +1,4 @@
 import 'package:go_router/go_router.dart';
-import 'package:pick_departure_app/presentation/view/authentication/login_page.dart';
 import 'package:pick_departure_app/presentation/view/home/home_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/new_order/new_order_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_detail/order_detail_page.dart';
@@ -7,6 +6,7 @@ import 'package:pick_departure_app/presentation/view/orders/order_list/order_lis
 import 'package:pick_departure_app/presentation/view/orders/order_preparation/order_preparation_page.dart';
 import 'package:pick_departure_app/presentation/view/picking/picking_page.dart';
 import 'package:pick_departure_app/presentation/view/products/product_list_page.dart';
+import 'package:pick_departure_app/presentation/view/splash/splash_page.dart';
 
 class NavigationRoutes {
   static const INITIAL_ROUTE = "/";
@@ -35,7 +35,7 @@ final GoRouter router = GoRouter(
   routes: [
     GoRoute(
       path: NavigationRoutes.INITIAL_ROUTE,
-      builder: (context, state) => const LoginPage(),
+      builder: (context, state) => const SplashPage(),
     ),
     StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) => HomePage(

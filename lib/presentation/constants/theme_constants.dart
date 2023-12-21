@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:pick_departure_app/presentation/constants/constants_colors.dart';
+import 'package:pick_departure_app/presentation/constants/colors_constants.dart';
 
 class AppTheme {
   static final textFormFieldBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(12),
     borderSide: const BorderSide(
-      color: ConstantsColors.grey,
+      color: ColorsConstants.grey,
       width: 1.6,
     ),
   );
 
   static final ThemeData themeData = ThemeData(
     useMaterial3: true,
-    colorSchemeSeed: ConstantsColors.primaryColor,
+    colorSchemeSeed: ColorsConstants.primaryColor,
     scaffoldBackgroundColor: Colors.white,
     textTheme: const TextTheme(
       titleLarge: TextStyle(
@@ -50,7 +50,7 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: ConstantsColors.primaryColor,
+        foregroundColor: ColorsConstants.primaryColor,
         padding: const EdgeInsets.symmetric(
           horizontal: 12,
           vertical: 4,
@@ -62,7 +62,7 @@ class AppTheme {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: ConstantsColors.primaryColor,
+        foregroundColor: ColorsConstants.primaryColor,
         minimumSize: const Size(double.infinity, 50),
         side: BorderSide(
           color: Colors.grey.shade200,
@@ -92,7 +92,7 @@ class AppTheme {
           ),
         ),
         backgroundColor: MaterialStateProperty.all<Color>(
-          ConstantsColors.primaryColor,
+          ColorsConstants.primaryColor,
         ),
       ),
     ),

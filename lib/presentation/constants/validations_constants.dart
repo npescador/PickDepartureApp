@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ConstantsValidations {
-  ConstantsValidations._();
+class ValidationsConstants {
+  ValidationsConstants._();
 
   static final navigationKey = GlobalKey<NavigatorState>();
 

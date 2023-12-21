@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pick_departure_app/common/extensions/extensions.dart';
-import 'package:pick_departure_app/presentation/constants/constants_validations.dart';
+import 'package:pick_departure_app/presentation/constants/colors_constants.dart';
+import 'package:pick_departure_app/presentation/constants/validations_constants.dart';
 import 'package:pick_departure_app/presentation/widget/custom_text_form_field.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,9 +34,8 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color(0xff1E2E3D),
-                      Color(0xff152534),
-                      Color(0xff0C1C2E),
+                      ColorsConstants.blue,
+                      ColorsConstants.darkBlue,
                     ],
                   ),
                 ),
@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                       validator: (value) {
                         return value!.isEmpty
                             ? "Enter your email"
-                            : ConstantsValidations.emailRegex.hasMatch(value)
+                            : ValidationsConstants.emailRegex.hasMatch(value)
                                 ? null
                                 : "Invalid Email Address";
                       },
@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                       validator: (value) {
                         return value!.isEmpty
                             ? "Enter your Password"
-                            : ConstantsValidations.passwordRegex.hasMatch(value)
+                            : ValidationsConstants.passwordRegex.hasMatch(value)
                                 ? null
                                 : "Invalid Password";
                       },
@@ -126,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                           ? () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Logged In!'),
+                                  content: Text("Logged In!"),
                                 ),
                               );
                               emailController.clear();
@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                               : Colors.grey.shade300,
                         ),
                       ),
-                      child: const Text('Login'),
+                      child: const Text("Login"),
                     ),
                     const SizedBox(
                       height: 30,
