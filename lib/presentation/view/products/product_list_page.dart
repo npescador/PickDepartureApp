@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
+import 'package:pick_departure_app/di/app_modules.dart';
+import 'package:pick_departure_app/presentation/model/resource_state.dart';
+import 'package:pick_departure_app/presentation/view/products/viewmodel/products_viewmodel.dart';
+import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
+import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
 
 class ProductsListPage extends StatefulWidget {
   const ProductsListPage({super.key});
@@ -9,26 +14,61 @@ class ProductsListPage extends StatefulWidget {
 }
 
 class _ProductsListPageState extends State<ProductsListPage> {
-  final List<ProductModel> _products = [
-    ProductModel(
-        id: 1,
-        name: "Naranjas",
-        description: "Bolsa de naranjas de 5 kgs",
-        barcode: "085469954",
-        stock: 15),
-    ProductModel(
-        id: 1,
-        name: "Coca Cola",
-        description: "Latas de coca cola",
-        barcode: "085469414",
-        stock: 10),
-    ProductModel(
-        id: 1,
-        name: "Jamón",
-        description: "Maza de Jamón",
-        barcode: "085465649",
-        stock: 18),
+  final ProductsViewModel _productsViewModel = inject<ProductsViewModel>();
+
+  List<ProductModel> _products = [
+    // ProductModel(
+    //     id: 1,
+    //     name: "Naranjas",
+    //     description: "Bolsa de naranjas de 5 kgs",
+    //     barcode: "085469954",
+    //     stock: 15),
+    // ProductModel(
+    //     id: 1,
+    //     name: "Coca Cola",
+    //     description: "Latas de coca cola",
+    //     barcode: "085469414",
+    //     stock: 10),
+    // ProductModel(
+    //     id: 1,
+    //     name: "Jamón",
+    //     description: "Maza de Jamón",
+    //     barcode: "085465649",
+    //     stock: 18),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _productsViewModel.getProductsState.stream.listen((state) {
+      switch (state.status) {
+        case Status.LOADING:
+          LoadingView.show(context);
+          break;
+        case Status.SUCCESS:
+          LoadingView.hide();
+          setState(() {
+            _products = state.data!;
+          });
+          break;
+        case Status.ERROR:
+          LoadingView.hide();
+          ErrorView.show(context, state.exception!.toString(), () {
+            _productsViewModel.fetchProducts();
+          });
+          break;
+      }
+    });
+
+    _productsViewModel.fetchProducts();
+  }
+
+  @override
+  void dispose() {
+    _productsViewModel.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +82,6 @@ class _ProductsListPageState extends State<ProductsListPage> {
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 32),
             itemCount: _products.length,
-            //itemCount: 2,
             itemBuilder: (_, index) {
               final product = _products[index];
               return Card(

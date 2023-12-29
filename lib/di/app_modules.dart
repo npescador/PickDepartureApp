@@ -1,21 +1,27 @@
 import 'package:get_it/get_it.dart';
+import 'package:pick_departure_app/data/product/local/product_local_impl.dart';
+import 'package:pick_departure_app/data/product/product_data_impl.dart';
+import 'package:pick_departure_app/domain/products_repository.dart';
+import 'package:pick_departure_app/presentation/view/products/viewmodel/products_viewmodel.dart';
 
 final inject = GetIt.instance;
 
 class AppModules {
   setup() {
-    _setupMainModule();
-    _setupJokesModule();
+    //_setupMainModule();
+    _setupProductsModule();
   }
 
-  _setupMainModule() {
-    //inject.registerSingleton(NetworkClient());
-  }
+  // _setupMainModule() {
+  //   //inject.registerSingleton(NetworkClient());
+  // }
 
-  _setupJokesModule() {
-    //inject.registerFactory(() => JokesRemoteImpl(networkClient: inject.get()));
-    //inject.registerFactory<JokesRepository>(
-    //    () => JokeDataImpl(jokesRemoteImpl: inject.get()));
-    //inject.registerFactory(() => JokesViewModel(jokesRepository: inject.get()));
+  _setupProductsModule() {
+    inject.registerFactory(() =>
+        ProductLocalImpl()); //No tengo muy claro si lo tengo que agregar o no
+    inject.registerFactory<ProductsRepository>(
+        () => ProductDataImpl(localImpl: inject.get()));
+    inject.registerFactory(
+        () => ProductsViewModel(productsRepository: inject.get()));
   }
 }
