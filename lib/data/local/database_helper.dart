@@ -8,43 +8,6 @@ class DataBaseHelper {
 
   Database? _db;
 
-  // Future<List<ShoppingListItem>> getItems() async {
-  //   Database db = await _getDb();
-
-  //   final items = await db.query(ShoppingListRepository.itemsTable);
-  //   final shoppingListItems = items.map((e) => ShoppingListItem.fromMap(e));
-
-  //   await closeDb();
-
-  //   return shoppingListItems.toList();
-  // }
-
-  // addItem(ShoppingListItem item) async {
-  //   Database db = await _getDb();
-
-  //   await db.insert(ShoppingListRepository.itemsTable, item.toMap());
-
-  //   await closeDb();
-  // }
-
-  // updateItem(ShoppingListItem item) async {
-  //   Database db = await _getDb();
-
-  //   await db.update(ShoppingListRepository.itemsTable, item.toMap(),
-  //       where: 'id = ?', whereArgs: [item.id]);
-
-  //   await closeDb();
-  // }
-
-  // deleteItem(ShoppingListItem item) async {
-  //   Database db = await _getDb();
-
-  //   await db.delete(ShoppingListRepository.itemsTable,
-  //       where: 'id = ?', whereArgs: [item.id]);
-
-  //   await closeDb();
-  // }
-
   Future<Database> getDb() async {
     if (_db == null || !_db!.isOpen) {
       _db = await openDatabase('shopping_list.db', version: 1);
