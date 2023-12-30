@@ -17,4 +17,14 @@ class ProductDataImpl extends ProductsRepository {
   Future<List<ProductModel>> getProducts() {
     return _localImpl.getProducts();
   }
+
+  @override
+  Future<ProductModel?> getProductByBarcode(String barcode) {
+    return _localImpl.getProductByBarcode(barcode);
+  }
+
+  @override
+  updateProduct(ProductModel product) {
+    _localImpl.updateProduct(product);
+  }
 }

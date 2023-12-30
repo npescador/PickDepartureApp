@@ -8,7 +8,7 @@ class OrderLocalImpl {
   Future<List<OrderModel>> getOrders() async {
     Database db = await _dbHelper.getDb();
 
-    final dataBaseOrders = await db.query(DataBaseHelper.orderTable);
+    final dataBaseOrders = await db.query(DataBaseHelper.ordersTable);
     final orderList = dataBaseOrders.map((e) => OrderModel.fromMap(e));
 
     await _dbHelper.closeDb();
@@ -32,7 +32,7 @@ class OrderLocalImpl {
   addNewOrder(OrderModel order, List<OrderDetail> orderDetails) async {
     Database db = await _dbHelper.getDb();
 
-    int orderId = await db.insert(DataBaseHelper.orderTable, order.toMap());
+    int orderId = await db.insert(DataBaseHelper.ordersTable, order.toMap());
 
     for (var detail in orderDetails) {
       detail.orderId = orderId;

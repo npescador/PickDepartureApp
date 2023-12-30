@@ -1,3 +1,5 @@
+// ignore_for_file: void_checks
+
 import 'dart:async';
 
 import 'package:pick_departure_app/data/product/product_model.dart';
@@ -11,12 +13,24 @@ class ProductsViewModel extends BaseViewModel {
   final StreamController<ResourceState<List<ProductModel>>> getProductsState =
       StreamController();
 
+  final StreamController<ResourceState<ProductModel?>> getProductBarcodeState =
+      StreamController();
+
+  final StreamController<ResourceState<ProductModel>> updateProductState =
+      StreamController();
+
+  final StreamController<ResourceState<void>> addProductState =
+      StreamController();
+
   ProductsViewModel({required ProductsRepository productsRepository})
       : _productsRepository = productsRepository;
 
   @override
   void dispose() {
     getProductsState.close();
+    getProductBarcodeState.close();
+    updateProductState.close();
+    addProductState.close();
   }
 
   fetchProducts() {
@@ -27,5 +41,35 @@ class ProductsViewModel extends BaseViewModel {
         .then((value) => getProductsState.add(ResourceState.success(value)))
         .catchError(
             (error) => getProductsState.add(ResourceState.error(error)));
+  }
+
+  getProductByBarcode(String barcode) {
+    getProductBarcodeState.add(ResourceState.loading());
+
+    _productsRepository
+        .getProductByBarcode(barcode)
+        .then(
+            (value) => getProductBarcodeState.add(ResourceState.success(value)))
+        .catchError(
+            (error) => getProductBarcodeState.add(ResourceState.error(error)));
+  }
+
+  updateProduct(ProductModel product) {
+    updateProductState.add(ResourceState.loading());
+
+    _productsRepository
+        .updateProduct(product)
+        .then((value) => updateProductState.add(ResourceState.success(value)))
+        .catchError(
+            (error) => updateProductState.add(ResourceState.error(error)));
+  }
+
+  addProduct(ProductModel product) {
+    addProductState.add(ResourceState.loading());
+
+    _productsRepository
+        .addProduct(product)
+        .then((value) => addProductState.add(ResourceState.success(value)))
+        .catchError((error) => addProductState.add(ResourceState.error(error)));
   }
 }
