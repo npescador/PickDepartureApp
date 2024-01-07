@@ -16,6 +16,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: widget.navigationShell,
       bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.greenAccent,
+        indicatorColor: Colors.green[100],
+        elevation: 2.0,
+        indicatorShape: const CircleBorder(),
         selectedIndex: widget.navigationShell.currentIndex,
         onDestinationSelected: (value) {
           widget.navigationShell.goBranch(value,
@@ -32,11 +36,11 @@ class _HomePageState extends State<HomePage> {
             selectedIcon: Icon(Icons.inventory),
             label: "Products",
           ),
-          NavigationDestination(
-            icon: Icon(Icons.document_scanner_outlined),
-            selectedIcon: Icon(Icons.document_scanner),
-            label: "Picking",
-          ),
+          // NavigationDestination(
+          //   icon: Icon(Icons.document_scanner_outlined),
+          //   selectedIcon: Icon(Icons.document_scanner),
+          //   label: "Picking",
+          // ),
         ],
       ),
     );

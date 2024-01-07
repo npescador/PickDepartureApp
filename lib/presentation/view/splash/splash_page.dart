@@ -23,10 +23,11 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       body: Center(
         child: Lottie.asset(
-          'lottie/loading.json',
+          'assets/lottie/loading.json',
           repeat: true,
           animate: true,
-          width: 120,
+          height: 400,
+          width: 400,
         ),
       ),
     );
