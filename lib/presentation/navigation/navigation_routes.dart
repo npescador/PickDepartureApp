@@ -66,13 +66,9 @@ final GoRouter router = GoRouter(
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
-                path: NavigationRoutes.PRODUCTS_ROUTE,
-                builder: (context, state) => const ProductsListPage())
-          ]),
-          StatefulShellBranch(routes: [
-            GoRoute(
-              path: NavigationRoutes.PICKING_ROUTE,
-              builder: (context, state) => const PickingPage(),
+              path: NavigationRoutes.PRODUCTS_ROUTE,
+              builder: (context, state) =>
+                  const ProductsListPage(reloadProductList: reloadProductList),
             )
           ]),
           StatefulShellBranch(routes: [
@@ -80,7 +76,12 @@ final GoRouter router = GoRouter(
               path: NavigationRoutes.PICKING_ROUTE,
               builder: (context, state) => const PickingPage(),
             )
-          ])
+          ]),
         ]),
   ],
 );
+
+void reloadProductList() {
+  // ignore: unused_element
+  setState() {}
+}

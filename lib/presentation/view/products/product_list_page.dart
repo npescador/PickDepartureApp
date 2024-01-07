@@ -7,7 +7,9 @@ import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
 import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
 
 class ProductsListPage extends StatefulWidget {
-  const ProductsListPage({super.key});
+  const ProductsListPage({super.key, required this.reloadProductList});
+
+  final Function reloadProductList;
 
   @override
   State<ProductsListPage> createState() => _ProductsListPageState();
@@ -16,26 +18,7 @@ class ProductsListPage extends StatefulWidget {
 class _ProductsListPageState extends State<ProductsListPage> {
   final ProductsViewModel _productsViewModel = inject<ProductsViewModel>();
 
-  List<ProductModel> _products = [
-    // ProductModel(
-    //     id: 1,
-    //     name: "Naranjas",
-    //     description: "Bolsa de naranjas de 5 kgs",
-    //     barcode: "085469954",
-    //     stock: 15),
-    // ProductModel(
-    //     id: 1,
-    //     name: "Coca Cola",
-    //     description: "Latas de coca cola",
-    //     barcode: "085469414",
-    //     stock: 10),
-    // ProductModel(
-    //     id: 1,
-    //     name: "Jamón",
-    //     description: "Maza de Jamón",
-    //     barcode: "085465649",
-    //     stock: 18),
-  ];
+  List<ProductModel> _products = [];
 
   @override
   void initState() {
@@ -77,6 +60,17 @@ class _ProductsListPageState extends State<ProductsListPage> {
         title: const Text("Products"),
         centerTitle: true,
       ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.redAccent,
+        child: const Icon(
+          Icons.replay_outlined,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          _getProducts();
+          setState(() {});
+        },
+      ),
       body: SafeArea(
         child: Scrollbar(
           child: ListView.builder(
@@ -111,5 +105,9 @@ class _ProductsListPageState extends State<ProductsListPage> {
         ),
       ),
     );
+  }
+
+  _getProducts() async {
+    _products = await _productsViewModel.reloadProductList();
   }
 }

@@ -198,6 +198,7 @@ class _PickingPageState extends State<PickingPage> {
       stock: 1,
     );
     _productsViewModel.addProduct(newProduct);
+
     setState(() {
       _showNewProductForm = false;
     });

@@ -44,6 +44,10 @@ class ProductsViewModel extends BaseViewModel {
             (error) => getProductsState.add(ResourceState.error(error)));
   }
 
+  Future<List<ProductModel>> reloadProductList() async {
+    return await _productsRepository.getProducts();
+  }
+
   // ignore: body_might_complete_normally_nullable
   Future<ProductModel?> fetchProductByBarcode(String barcode) async {
     debugPrint("Estado loading");
