@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:pick_departure_app/common/extensions/extensions.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
 import 'package:pick_departure_app/presentation/view/products/viewmodel/products_viewmodel.dart';
@@ -25,62 +28,6 @@ class _PickingPageState extends State<PickingPage> {
     super.initState();
   }
 
-  Future<void> scan() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#63d674', "Close", false, ScanMode.DEFAULT);
-      debugPrint(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = "Failed to get platform version.";
-    }
-
-    if (!mounted) return;
-
-    if (barcodeScanRes.isNotEmpty) {
-      _result = barcodeScanRes;
-      ProductModel? productScanned =
-          _productsViewModel.getProductByBarcode(barcodeScanRes);
-
-      if (productScanned != null) {
-        productScanned.stock += 1;
-        _productsViewModel.updateProduct(productScanned);
-      } else {
-        // No existe, preguntamos si lo damos de alta
-        showDialog(
-          context: context,
-          builder: (BuildContext dialogContext) {
-            return AlertDialog(
-              title: const Text("Producto no encontrado"),
-              content: const Text(
-                  "¿Desea agregar un nuevo producto con este código de barras?"),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(dialogContext).pop();
-                  },
-                  child: const Text("Cancelar"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    _showNewProductForm = !_showNewProductForm;
-                    Navigator.of(dialogContext).pop();
-                    setState(() {});
-                  },
-                  child: const Text("Aceptar"),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    }
-
-    setState(() {
-      _result = barcodeScanRes;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,12 +39,10 @@ class _PickingPageState extends State<PickingPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: const Icon(Icons.document_scanner),
+                icon: const Icon(Icons.document_scanner, size: 100),
                 onPressed: () {
-                  setState(() {
-                    _showNewProductForm = false;
-                  });
-                  scan();
+                  _scan();
+                  setState(() {});
                 },
               ),
               Visibility(
@@ -139,23 +84,29 @@ class _PickingPageState extends State<PickingPage> {
                       const SizedBox(
                         height: 15,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          ProductModel newProduct = ProductModel(
-                            id: -1,
-                            name: nameController.text,
-                            description: descriptionController.text,
-                            barcode: _result,
-                            stock: 1,
-                          );
-                          _productsViewModel.addProduct(newProduct);
-                          setState(() {
-                            _showNewProductForm = false;
-                          });
-                          nameController.clear();
-                          descriptionController.clear();
-                        },
-                        child: const Text("Create product"),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              _addNewProduct();
+                            },
+                            child: const Text("Create"),
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                _showNewProductForm = false;
+                              });
+                              nameController.clear();
+                              descriptionController.clear();
+                            },
+                            child: const Text("Cancel"),
+                          )
+                        ],
                       ),
                       const SizedBox(
                         height: 30,
@@ -169,5 +120,88 @@ class _PickingPageState extends State<PickingPage> {
         );
       }),
     );
+  }
+
+  Future<void> _scan() async {
+    String barcodeScanRes;
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          "#63d674", "Close", false, ScanMode.DEFAULT);
+      debugPrint(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = "Failed to get platform version.";
+    }
+
+    if (!mounted) return;
+
+    if (barcodeScanRes.isNotEmpty && barcodeScanRes != "-1") {
+      _result = barcodeScanRes;
+      debugPrint(
+          "Comenzamos la comprobación de existencia del código de barras");
+      ProductModel? productScanned =
+          await _productsViewModel.fetchProductByBarcode(barcodeScanRes);
+
+      debugPrint("Ya tenemos el resultado");
+      if (productScanned != null) {
+        productScanned.stock += 1;
+        _productsViewModel.updateProduct(productScanned);
+        context.showSnackBar("Entrada del producto realizada");
+        setState(() {
+          _showNewProductForm = false;
+        });
+      } else {
+        // No existe, preguntamos si lo damos de alta
+        showDialog(
+          context: context,
+          builder: (BuildContext dialogContext) {
+            return AlertDialog(
+              title: const Text("Producto no encontrado"),
+              content: const Text(
+                  "¿Desea agregar un nuevo producto con este código de barras?"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _showNewProductForm = false;
+                      Navigator.of(dialogContext).pop();
+                    });
+                  },
+                  child: const Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _showNewProductForm = !_showNewProductForm;
+                      Navigator.of(dialogContext).pop();
+                    });
+                  },
+                  child: const Text("Ok"),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+
+    setState(() {
+      _result = barcodeScanRes;
+    });
+  }
+
+  _addNewProduct() {
+    ProductModel newProduct = ProductModel(
+      id: UniqueKey().hashCode,
+      name: nameController.text,
+      description: descriptionController.text,
+      barcode: _result,
+      stock: 1,
+    );
+    _productsViewModel.addProduct(newProduct);
+    setState(() {
+      _showNewProductForm = false;
+    });
+    nameController.clear();
+    descriptionController.clear();
   }
 }

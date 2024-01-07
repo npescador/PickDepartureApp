@@ -8,7 +8,7 @@ extension ContextExtension on BuildContext {
         ..removeCurrentSnackBar()
         ..showSnackBar(
           SnackBar(
-            content: Text(message ?? ''),
+            content: Text(message ?? ""),
           ),
         );
 }

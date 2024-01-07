@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
 import 'package:pick_departure_app/domain/products_repository.dart';
 import 'package:pick_departure_app/presentation/base/base_view_model.dart';
@@ -13,11 +14,11 @@ class ProductsViewModel extends BaseViewModel {
   final StreamController<ResourceState<List<ProductModel>>> getProductsState =
       StreamController();
 
-  final StreamController<ResourceState<ProductModel?>> getProductBarcodeState =
-      StreamController();
+  // final StreamController<ResourceState<ProductModel?>> getProductBarcodeState =
+  //     StreamController();
 
-  final StreamController<ResourceState<ProductModel>> updateProductState =
-      StreamController();
+  // final StreamController<ResourceState<ProductModel>> updateProductState =
+  //     StreamController();
 
   final StreamController<ResourceState<void>> addProductState =
       StreamController();
@@ -28,8 +29,8 @@ class ProductsViewModel extends BaseViewModel {
   @override
   void dispose() {
     getProductsState.close();
-    getProductBarcodeState.close();
-    updateProductState.close();
+    //getProductBarcodeState.close();
+    //updateProductState.close();
     addProductState.close();
   }
 
@@ -43,33 +44,36 @@ class ProductsViewModel extends BaseViewModel {
             (error) => getProductsState.add(ResourceState.error(error)));
   }
 
-  getProductByBarcode(String barcode) {
-    getProductBarcodeState.add(ResourceState.loading());
+  // ignore: body_might_complete_normally_nullable
+  Future<ProductModel?> fetchProductByBarcode(String barcode) async {
+    debugPrint("Estado loading");
+    //getProductBarcodeState.add(ResourceState.loading());
 
-    _productsRepository
-        .getProductByBarcode(barcode)
-        .then(
-            (value) => getProductBarcodeState.add(ResourceState.success(value)))
-        .catchError(
-            (error) => getProductBarcodeState.add(ResourceState.error(error)));
+    return await _productsRepository.getProductByBarcode(barcode);
+    // _productsRepository
+    //     .getProductByBarcode(barcode)
+    //     .then(
+    //         (value) => getProductBarcodeState.add(ResourceState.success(value)))
+    //     .catchError(
+    //         (error) => getProductBarcodeState.add(ResourceState.error(error)));
   }
 
   updateProduct(ProductModel product) {
-    updateProductState.add(ResourceState.loading());
+    _productsRepository.updateProduct(product);
 
-    _productsRepository
-        .updateProduct(product)
-        .then((value) => updateProductState.add(ResourceState.success(value)))
-        .catchError(
-            (error) => updateProductState.add(ResourceState.error(error)));
+    // updateProductState.add(ResourceState.loading());
+
+    // _productsRepository
+    //     .updateProduct(product)
+    //     .then((value) => updateProductState.add(ResourceState.success(value)))
+    //     .catchError(
+    //         (error) => updateProductState.add(ResourceState.error(error)));
   }
 
   addProduct(ProductModel product) {
     addProductState.add(ResourceState.loading());
 
-    _productsRepository
-        .addProduct(product)
-        .then((value) => addProductState.add(ResourceState.success(value)))
-        .catchError((error) => addProductState.add(ResourceState.error(error)));
+    _productsRepository.addProduct(product);
+    //.catchError((error) => addProductState.add(ResourceState.error(error)));
   }
 }

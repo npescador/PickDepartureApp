@@ -20,7 +20,8 @@ class ProductLocalImpl {
   addProduct(ProductModel product) async {
     Database db = await _dbHelper.getDb();
 
-    await db.insert(DataBaseHelper.productTable, product.toMap());
+    await db.insert(DataBaseHelper.productTable, product.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
 
     await _dbHelper.closeDb();
   }
@@ -35,24 +36,24 @@ class ProductLocalImpl {
   }
 
   Future<ProductModel?> getProductByBarcode(String barcode) async {
-    try {
-      Database db = await _dbHelper.getDb();
+    debugPrint("Obtenemos la base de datos");
+    Database db = await _dbHelper.getDb();
 
-      final dataBaseProduct = await db.rawQuery(
-          "SELECT * FROM ${DataBaseHelper.productTable} WHERE barcode = ?",
-          [barcode]);
+    debugPrint(
+        "Lanzamos la consula SELECT * FROM ${DataBaseHelper.productTable} WHERE barcode = $barcode");
+    final dataBaseProduct = await db.rawQuery(
+        "SELECT * FROM ${DataBaseHelper.productTable} WHERE barcode = ?",
+        [barcode]);
 
-      ProductModel? user;
-      if (dataBaseProduct.isNotEmpty) {
-        user = ProductModel.fromMap(dataBaseProduct.first);
-      }
-
-      return user;
-    } catch (e) {
-      debugPrint('Error al obtener el producto: $e');
-      return null;
-    } finally {
-      await _dbHelper.closeDb();
+    ProductModel? product;
+    if (dataBaseProduct.isNotEmpty) {
+      debugPrint("Mapeamos el resultado si no viene vacio");
+      product = ProductModel.fromMap(dataBaseProduct.first);
     }
+
+    await _dbHelper.closeDb();
+
+    debugPrint("Devolvemos el resultado");
+    return product;
   }
 }

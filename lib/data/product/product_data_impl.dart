@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:pick_departure_app/data/product/local/product_local_impl.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
 import 'package:pick_departure_app/domain/products_repository.dart';
@@ -19,8 +20,9 @@ class ProductDataImpl extends ProductsRepository {
   }
 
   @override
-  Future<ProductModel?> getProductByBarcode(String barcode) {
-    return _localImpl.getProductByBarcode(barcode);
+  Future<ProductModel?> getProductByBarcode(String barcode) async {
+    debugPrint("Llamada a local data impl");
+    return await _localImpl.getProductByBarcode(barcode);
   }
 
   @override
