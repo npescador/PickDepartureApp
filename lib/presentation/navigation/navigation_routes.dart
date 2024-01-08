@@ -4,7 +4,6 @@ import 'package:pick_departure_app/presentation/view/orders/new_order/new_order_
 import 'package:pick_departure_app/presentation/view/orders/order_detail/order_detail_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/order_list_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_preparation/order_preparation_page.dart';
-import 'package:pick_departure_app/presentation/view/picking/picking_page.dart';
 import 'package:pick_departure_app/presentation/view/products/product_list_page.dart';
 import 'package:pick_departure_app/presentation/view/splash/splash_page.dart';
 
@@ -69,12 +68,6 @@ final GoRouter router = GoRouter(
               path: NavigationRoutes.PRODUCTS_ROUTE,
               builder: (context, state) =>
                   const ProductsListPage(reloadProductList: reloadProductList),
-            )
-          ]),
-          StatefulShellBranch(routes: [
-            GoRoute(
-              path: NavigationRoutes.PICKING_ROUTE,
-              builder: (context, state) => const PickingPage(),
             )
           ]),
         ]),

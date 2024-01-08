@@ -5,6 +5,9 @@ import 'package:pick_departure_app/di/app_modules.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/viewmodel/orders_viewmodel.dart';
+import 'package:pick_departure_app/presentation/widget/Order/order_row_item.dart';
+import 'package:pick_departure_app/presentation/widget/custom_body_list_view.dart';
+import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
 import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
 
@@ -15,13 +18,20 @@ class OrderListPage extends StatefulWidget {
   State<OrderListPage> createState() => _OrderListPageState();
 }
 
-class _OrderListPageState extends State<OrderListPage> {
+class _OrderListPageState extends State<OrderListPage>
+    with TickerProviderStateMixin {
   final OrdersViewModel _orderessViewModel = inject<OrdersViewModel>();
+  final ScrollController _scrollController = ScrollController();
   List<OrderModel> _orders = [];
+
+  late final AnimationController animationController;
 
   @override
   void initState() {
     super.initState();
+
+    animationController = AnimationController(
+        duration: const Duration(milliseconds: 1000), vsync: this);
 
     _orderessViewModel.getOrdersState.stream.listen((state) {
       switch (state.status) {
@@ -47,8 +57,16 @@ class _OrderListPageState extends State<OrderListPage> {
   }
 
   @override
+  void dispose() {
+    animationController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: const Text("Orders"),
         centerTitle: true,
@@ -59,26 +77,89 @@ class _OrderListPageState extends State<OrderListPage> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Scrollbar(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 32),
-            itemCount: _orders.length,
-            itemBuilder: (_, index) {
-              final order = _orders[index];
-              return GestureDetector(
-                onTap: () {
-                  context.go(NavigationRoutes.ORDER_DETAIL_ROUTE);
-                },
-                child: Card(
-                  child: Text(
-                      "Order ${order.orderCode}  - Status: ${order.status}"),
-                ),
-              );
-            },
-          ),
+      body: CustomBodyListView(
+        scrollController: _scrollController,
+        listWidget: ListView.builder(
+          itemCount: _orders.length,
+          padding: const EdgeInsets.only(top: 8),
+          itemBuilder: (BuildContext context, int index) {
+            final int count = _orders.length > 10 ? 10 : _orders.length;
+            final Animation<double> animation =
+                Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                    parent: animationController,
+                    curve: Interval((1 / count) * index, 1.0,
+                        curve: Curves.fastOutSlowIn)));
+            animationController.forward();
+            return CustomListView(
+              callback: () {},
+              itemRow: OrderRowItem(order: _orders[index]),
+              animation: animation,
+              animationController: animationController,
+            );
+          },
         ),
       ),
     );
+    //   SafeArea(
+    //     child: Material(
+    //       child: Theme(
+    //         data: AppTheme2.buildLightTheme(),
+    //         child: Stack(
+    //           children: [
+    //             InkWell(
+    //               splashColor: Colors.transparent,
+    //               focusColor: Colors.transparent,
+    //               highlightColor: Colors.transparent,
+    //               hoverColor: Colors.transparent,
+    //               onTap: () {
+    //                 FocusScope.of(context).requestFocus(FocusNode());
+    //               },
+    //               child: Column(
+    //                 children: [
+    //                   Expanded(
+    //                     child: NestedScrollView(
+    //                       headerSliverBuilder:
+    //                           (BuildContext context, bool innerBoxIsScrolled) {
+    //                         return [];
+    //                       },
+    //                       controller: _scrollController,
+    //                       body: Container(
+    //                         color: AppTheme2.buildLightTheme()
+    //                             .colorScheme
+    //                             .background,
+    //                         child: ListView.builder(
+    //                           itemCount: _orders.length,
+    //                           padding: const EdgeInsets.only(top: 8),
+    //                           itemBuilder: (BuildContext context, int index) {
+    //                             final int count =
+    //                                 _orders.length > 10 ? 10 : _orders.length;
+    //                             final Animation<double> animation =
+    //                                 Tween<double>(begin: 0.0, end: 1.0).animate(
+    //                                     CurvedAnimation(
+    //                                         parent: animationController,
+    //                                         curve: Interval(
+    //                                             (1 / count) * index, 1.0,
+    //                                             curve: Curves.fastOutSlowIn)));
+    //                             animationController.forward();
+    //                             return CustomListView(
+    //                               callback: () {},
+    //                               itemRow: OrderRowItem(order: _orders[index]),
+    //                               animation: animation,
+    //                               animationController: animationController,
+    //                             );
+    //                           },
+    //                         ),
+    //                       ),
+    //                     ),
+    //                   )
+    //                 ],
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }
