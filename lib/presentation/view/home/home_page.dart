@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.navigationShell});
@@ -16,9 +17,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: widget.navigationShell,
       bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.greenAccent,
-        indicatorColor: Colors.green[100],
-        elevation: 2.0,
+        surfaceTintColor: Colors.white,
+        backgroundColor: AppTheme2.buildLightTheme().secondaryHeaderColor,
+        indicatorColor: AppTheme2.buildLightTheme().indicatorColor,
         indicatorShape: const CircleBorder(),
         selectedIndex: widget.navigationShell.currentIndex,
         onDestinationSelected: (value) {
@@ -36,11 +37,6 @@ class _HomePageState extends State<HomePage> {
             selectedIcon: Icon(Icons.inventory),
             label: "Products",
           ),
-          // NavigationDestination(
-          //   icon: Icon(Icons.document_scanner_outlined),
-          //   selectedIcon: Icon(Icons.document_scanner),
-          //   label: "Picking",
-          // ),
         ],
       ),
     );
