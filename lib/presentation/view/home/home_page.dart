@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,26 +17,32 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.navigationShell,
-      bottomNavigationBar: NavigationBar(
-        surfaceTintColor: Colors.white,
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: AppTheme2.buildLightTheme().primaryColor,
+        unselectedItemColor: AppTheme2.buildLightTheme().primaryColorLight,
         backgroundColor: AppTheme2.buildLightTheme().secondaryHeaderColor,
-        indicatorColor: AppTheme2.buildLightTheme().indicatorColor,
-        indicatorShape: const CircleBorder(),
-        selectedIndex: widget.navigationShell.currentIndex,
-        onDestinationSelected: (value) {
-          widget.navigationShell.goBranch(value,
-              initialLocation: value == widget.navigationShell.currentIndex);
+        type: BottomNavigationBarType.fixed,
+        currentIndex: widget.navigationShell.currentIndex,
+        onTap: (index) {
+          widget.navigationShell.goBranch(
+            index,
+            initialLocation: index == widget.navigationShell.currentIndex,
+          );
+          setState(() {});
         },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.shopping_bag_outlined),
-            selectedIcon: Icon(Icons.shopping_bag),
-            label: "Orders",
+        items: [
+          BottomNavigationBarItem(
+            activeIcon: Icon(
+              MdiIcons.shopping,
+              color: AppTheme2.buildLightTheme().primaryColor,
+            ),
+            icon: Icon(MdiIcons.shoppingOutline),
+            label: 'Orders',
           ),
-          NavigationDestination(
+          const BottomNavigationBarItem(
+            activeIcon: Icon(Icons.inventory),
             icon: Icon(Icons.inventory_2_outlined),
-            selectedIcon: Icon(Icons.inventory),
-            label: "Products",
+            label: 'Products',
           ),
         ],
       ),

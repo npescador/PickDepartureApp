@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pick_departure_app/data/order/order_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
+import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/viewmodel/orders_viewmodel.dart';
@@ -20,7 +21,7 @@ class OrderListPage extends StatefulWidget {
 
 class _OrderListPageState extends State<OrderListPage>
     with TickerProviderStateMixin {
-  final OrdersViewModel _orderessViewModel = inject<OrdersViewModel>();
+  final OrdersViewModel _ordersViewModel = inject<OrdersViewModel>();
   final ScrollController _scrollController = ScrollController();
   List<OrderModel> _orders = [];
 
@@ -33,7 +34,7 @@ class _OrderListPageState extends State<OrderListPage>
     animationController = AnimationController(
         duration: const Duration(milliseconds: 1000), vsync: this);
 
-    _orderessViewModel.getOrdersState.stream.listen((state) {
+    _ordersViewModel.getOrdersState.stream.listen((state) {
       switch (state.status) {
         case Status.LOADING:
           LoadingView.show(context);
@@ -47,13 +48,13 @@ class _OrderListPageState extends State<OrderListPage>
         case Status.ERROR:
           LoadingView.hide();
           ErrorView.show(context, state.exception!.toString(), () {
-            _orderessViewModel.fetchProducts();
+            _ordersViewModel.fetchOrders();
           });
           break;
       }
     });
 
-    _orderessViewModel.fetchProducts();
+    _ordersViewModel.fetchOrders();
   }
 
   @override
@@ -68,12 +69,23 @@ class _OrderListPageState extends State<OrderListPage>
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text("Orders"),
+        backgroundColor: AppTheme2.buildLightTheme().primaryColor,
+        title: const Text(
+          "Orders",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 22,
+          ),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
-            onPressed: () => {context.go(NavigationRoutes.NEW_ORDER_ROUTE)},
+            onPressed: () => {
+              context.go(NavigationRoutes.NEW_ORDER_ROUTE, extra: () {
+                _ordersViewModel.fetchOrders();
+              })
+            },
           ),
         ],
       ),

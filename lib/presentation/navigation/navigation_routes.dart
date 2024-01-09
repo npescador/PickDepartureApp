@@ -58,7 +58,9 @@ final GoRouter router = GoRouter(
                 ),
                 GoRoute(
                   path: NavigationRoutes._NEW_ORDER_PATH,
-                  builder: (context, state) => const NewOrderPage(),
+                  builder: (context, state) => NewOrderPage(
+                    saveOrder: state.extra as Function(),
+                  ),
                 )
               ],
             ),
