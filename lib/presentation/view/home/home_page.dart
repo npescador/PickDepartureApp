@@ -19,8 +19,8 @@ class _HomePageState extends State<HomePage> {
       body: widget.navigationShell,
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: AppTheme2.buildLightTheme().primaryColor,
-        unselectedItemColor: AppTheme2.buildLightTheme().primaryColorLight,
-        backgroundColor: AppTheme2.buildLightTheme().secondaryHeaderColor,
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.black,
         type: BottomNavigationBarType.fixed,
         currentIndex: widget.navigationShell.currentIndex,
         onTap: (index) {

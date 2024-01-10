@@ -9,11 +9,12 @@ import 'package:pick_departure_app/data/product/product_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
+import 'package:pick_departure_app/presentation/search/product_search_delegate.dart';
 import 'package:pick_departure_app/presentation/view/products/viewmodel/products_viewmodel.dart';
-import 'package:pick_departure_app/presentation/widget/Product/product_row_item.dart';
 import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
 import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
+import 'package:pick_departure_app/presentation/widget/product/product_row_item.dart';
 
 class ProductsListPage extends StatefulWidget {
   const ProductsListPage({super.key, required this.reloadProductList});
@@ -85,6 +86,27 @@ class _ProductsListPageState extends State<ProductsListPage>
               fontSize: 22,
             )),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.search_rounded,
+              color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+            ),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: ProductSearchDelegate(
+                    searchFieldStyle: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 22,
+                    ),
+                    searchFieldLabel: " Search product",
+                    products: _products,
+                    animationController: animationController),
+              );
+            },
+          )
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme2.buildLightTheme().dialogBackgroundColor,
