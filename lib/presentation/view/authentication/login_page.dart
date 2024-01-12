@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pick_departure_app/common/extensions/extensions.dart';
-import 'package:pick_departure_app/presentation/constants/colors_constants.dart';
-import 'package:pick_departure_app/presentation/constants/validations_constants.dart';
-import 'package:pick_departure_app/presentation/widget/custom_text_form_field.dart';
+import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,145 +12,154 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
+  final TextEditingController _controllerUsername = TextEditingController();
+  final TextEditingController _controllerPassword = TextEditingController();
+  final FocusNode _focusNodePassword = FocusNode();
   bool isObscure = true;
 
   @override
   Widget build(BuildContext context) {
     final size = context.mediaQuerySize;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(30.0),
           child: Column(
             children: [
-              Container(
-                height: size.height * 0.24,
-                width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      ColorsConstants.blue,
-                      ColorsConstants.darkBlue,
-                    ],
+              const SizedBox(height: 50),
+              Icon(Icons.person_pin,
+                  size: 252, color: AppTheme2.buildLightTheme().primaryColor),
+              Text(
+                "Login to your account",
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              const SizedBox(height: 60),
+              TextFormField(
+                controller: _controllerUsername,
+                keyboardType: TextInputType.name,
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  labelText: "Username",
+                  suffixIcon: Icon(
+                    Icons.person_outline,
+                    color: AppTheme2.buildLightTheme().primaryColor,
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Login",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    const SizedBox(
-                      height: 6,
-                    ),
-                    Text(
-                      "Sign in with your email",
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
-                ),
+                onEditingComplete: () => _focusNodePassword.requestFocus(),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter username.";
+                  }
+
+                  return null;
+                },
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    CustomTextFormField(
-                      labelText: "Email",
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      onChanged: (value) {
-                        _formKey.currentState?.validate();
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _controllerPassword,
+                focusNode: _focusNodePassword,
+                obscureText: isObscure,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isObscure = !isObscure;
+                        });
                       },
-                      validator: (value) {
-                        return value!.isEmpty
-                            ? "Enter your email"
-                            : ValidationsConstants.emailRegex.hasMatch(value)
-                                ? null
-                                : "Invalid Email Address";
-                      },
-                      controller: emailController,
-                    ),
-                    CustomTextFormField(
-                      labelText: "Password",
-                      keyboardType: TextInputType.visiblePassword,
-                      textInputAction: TextInputAction.done,
-                      onChanged: (value) {
-                        _formKey.currentState?.validate();
-                      },
-                      validator: (value) {
-                        return value!.isEmpty
-                            ? "Enter your Password"
-                            : ValidationsConstants.passwordRegex.hasMatch(value)
-                                ? null
-                                : "Invalid Password";
-                      },
-                      controller: passwordController,
-                      obscureText: isObscure,
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.only(right: 15),
-                        child: IconButton(
+                      icon: isObscure
+                          ? Icon(
+                              Icons.visibility_outlined,
+                              color: AppTheme2.buildLightTheme().primaryColor,
+                            )
+                          : Icon(
+                              Icons.visibility_off_outlined,
+                              color: AppTheme2.buildLightTheme().primaryColor,
+                            )),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter password.";
+                  }
+
+                  return null;
+                },
+              ),
+              const SizedBox(height: 60),
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FloatingActionButton.extended(
                           onPressed: () {
-                            setState(() {
-                              isObscure = !isObscure;
-                            });
+                            // Validación del usuario para continuar
                           },
-                          style: ButtonStyle(
-                            minimumSize: MaterialStateProperty.all(
-                              const Size(48, 48),
+                          label: const Text(
+                            "Login",
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          icon: Icon(
-                            isObscure
-                                ? Icons.visibility_off_outlined
-                                : Icons.visibility_outlined,
-                            color: Colors.black,
+                          icon: const Icon(Icons.login),
+                          backgroundColor: AppTheme2.buildLightTheme()
+                              .primaryColor, // Puedes ajustar el color según tus preferencias
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
+                          elevation: 5.0,
                         ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    FilledButton(
-                      onPressed: _formKey.currentState?.validate() ?? false
-                          ? () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("Logged In!"),
-                                ),
-                              );
-                              emailController.clear();
-                              passwordController.clear();
-                            }
-                          : null,
-                      style: const ButtonStyle().copyWith(
-                        backgroundColor: MaterialStateProperty.all(
-                          _formKey.currentState?.validate() ?? false
-                              ? null
-                              : Colors.grey.shade300,
-                        ),
+                      const SizedBox(
+                        width: 16,
                       ),
-                      child: const Text("Login"),
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                  ],
-                ),
+                      FloatingActionButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        elevation: 5.0,
+                        backgroundColor:
+                            AppTheme2.buildLightTheme().dialogBackgroundColor,
+                        child: Icon(
+                          MdiIcons.barcodeScan,
+                          color: AppTheme2.buildLightTheme().primaryColor,
+                        ),
+                        onPressed: () {
+                          //_scan();
+                        },
+                      )
+                    ],
+                  ),
+                ],
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _focusNodePassword.dispose();
+    _controllerUsername.dispose();
+    _controllerPassword.dispose();
+    super.dispose();
   }
 }

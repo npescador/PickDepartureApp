@@ -13,7 +13,6 @@ class NavigationRoutes {
   static const HOME_ROUTE = "/home";
   static const ORDERS_ROUTE = "/orders";
   static const PRODUCTS_ROUTE = "/productos";
-  static const PICKING_ROUTE = "/picking";
 
   static const _ORDER_DETAIL_PATH = "orderDetail";
   static const ORDER_DETAIL_ROUTE = "$ORDERS_ROUTE/$_ORDER_DETAIL_PATH";
@@ -24,9 +23,6 @@ class NavigationRoutes {
   static const _ORDER_PREPARATION_PATH = "orderPreparation";
   static const ORDER_PREAPARATION_ROUTE =
       "$ORDERS_ROUTE/$_ORDER_DETAIL_PATH/$_ORDER_PREPARATION_PATH";
-
-  static const _PRODUCT_DETAIL_PATH = "productDetail";
-  static const PRODUCT_DETAIL_ROUTE = "$PRODUCTS_ROUTE/$_PRODUCT_DETAIL_PATH";
 }
 
 final GoRouter router = GoRouter(
@@ -37,9 +33,8 @@ final GoRouter router = GoRouter(
       builder: (context, state) => const SplashPage(),
     ),
     StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) => HomePage(
-              navigationShell: navigationShell,
-            ),
+        builder: (context, state, navigationShell) =>
+            HomePage(navigationShell: navigationShell),
         branches: [
           StatefulShellBranch(routes: [
             GoRoute(
@@ -68,15 +63,9 @@ final GoRouter router = GoRouter(
           StatefulShellBranch(routes: [
             GoRoute(
               path: NavigationRoutes.PRODUCTS_ROUTE,
-              builder: (context, state) =>
-                  const ProductsListPage(reloadProductList: reloadProductList),
+              builder: (context, state) => const ProductsListPage(),
             )
           ]),
         ]),
   ],
 );
-
-void reloadProductList() {
-  // ignore: unused_element
-  setState() {}
-}

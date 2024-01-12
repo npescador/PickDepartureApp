@@ -17,9 +17,7 @@ import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart
 import 'package:pick_departure_app/presentation/widget/product/product_row_item.dart';
 
 class ProductsListPage extends StatefulWidget {
-  const ProductsListPage({super.key, required this.reloadProductList});
-
-  final Function reloadProductList;
+  const ProductsListPage({super.key});
 
   @override
   State<ProductsListPage> createState() => _ProductsListPageState();

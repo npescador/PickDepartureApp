@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
+import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 
 void main() {
@@ -15,6 +16,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: router,
+      theme: AppTheme2.buildLightTheme(),
     );
   }
 }
