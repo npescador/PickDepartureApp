@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:pick_departure_app/presentation/view/authentication/login_page.dart';
 import 'package:pick_departure_app/presentation/view/home/home_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/new_order/new_order_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_detail/order_detail_page.dart';
@@ -10,9 +11,16 @@ import 'package:pick_departure_app/presentation/view/splash/splash_page.dart';
 class NavigationRoutes {
   static const INITIAL_ROUTE = "/";
 
-  static const HOME_ROUTE = "/home";
-  static const ORDERS_ROUTE = "/orders";
-  static const PRODUCTS_ROUTE = "/productos";
+  static const LOGIN_ROUTE = "/login";
+
+  static const HOME_PATH = "home";
+  static const HOME_ROUTE = "$LOGIN_ROUTE/$HOME_PATH";
+
+  static const ORDERS_PATH = "orders";
+  static const ORDERS_ROUTE = "$LOGIN_ROUTE/$ORDERS_PATH";
+
+  static const PRODUCTS_PATH = "productos";
+  static const PRODUCTS_ROUTE = "$LOGIN_ROUTE/$PRODUCTS_PATH";
 
   static const _ORDER_DETAIL_PATH = "orderDetail";
   static const ORDER_DETAIL_ROUTE = "$ORDERS_ROUTE/$_ORDER_DETAIL_PATH";
@@ -32,9 +40,14 @@ final GoRouter router = GoRouter(
       path: NavigationRoutes.INITIAL_ROUTE,
       builder: (context, state) => const SplashPage(),
     ),
+    GoRoute(
+      path: NavigationRoutes.LOGIN_ROUTE,
+      builder: (context, state) => const LoginPage(),
+    ),
     StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) =>
-            HomePage(navigationShell: navigationShell),
+        builder: (context, state, navigationShell) => HomePage(
+              navigationShell: navigationShell,
+            ),
         branches: [
           StatefulShellBranch(routes: [
             GoRoute(

@@ -38,4 +38,26 @@ class UserLocalImpl {
       await _dbHelper.closeDb();
     }
   }
+
+  Future<UserModel?> getUserByBarcode(String barcode) async {
+    try {
+      Database db = await _dbHelper.getDb();
+
+      final dataBaseUser = await db.rawQuery(
+          'SELECT * FROM ${DataBaseHelper.userTable} WHERE barcode = ?',
+          [barcode]);
+
+      UserModel? user;
+      if (dataBaseUser.isNotEmpty) {
+        user = UserModel.fromMap(dataBaseUser.first);
+      }
+
+      return user;
+    } catch (e) {
+      debugPrint('Error al obtener usuario: $e');
+      return null;
+    } finally {
+      await _dbHelper.closeDb();
+    }
+  }
 }

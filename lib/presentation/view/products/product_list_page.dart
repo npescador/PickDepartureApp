@@ -260,7 +260,7 @@ class _ProductsListPageState extends State<ProductsListPage>
     String barcodeScanRes;
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          "#63d674", "Close", false, ScanMode.DEFAULT);
+          "#63d674", "Close", false, ScanMode.BARCODE);
       debugPrint(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = "Failed to get platform version.";

@@ -3,8 +3,12 @@ import 'package:pick_departure_app/data/order/local/order_local_impl.dart';
 import 'package:pick_departure_app/data/order/order_data_impl.dart';
 import 'package:pick_departure_app/data/product/local/product_local_impl.dart';
 import 'package:pick_departure_app/data/product/product_data_impl.dart';
+import 'package:pick_departure_app/data/users/local/user_local_impl.dart';
+import 'package:pick_departure_app/data/users/user_data_impl.dart';
 import 'package:pick_departure_app/domain/orders_repository.dart';
 import 'package:pick_departure_app/domain/products_repository.dart';
+import 'package:pick_departure_app/domain/users_repository.dart';
+import 'package:pick_departure_app/presentation/view/authentication/viewmodel/user_viewmodel.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/viewmodel/orders_viewmodel.dart';
 import 'package:pick_departure_app/presentation/view/products/viewmodel/products_viewmodel.dart';
 
@@ -15,6 +19,7 @@ class AppModules {
     //_setupMainModule();
     _setupProductsModule();
     _setupOrdersModule();
+    _setupUsersModule();
   }
 
   // _setupMainModule() {
@@ -37,5 +42,13 @@ class AppModules {
         () => OrderDataImpl(localImpl: inject.get()));
     inject
         .registerFactory(() => OrdersViewModel(ordersRepository: inject.get()));
+  }
+
+  _setupUsersModule() {
+    inject.registerFactory(() =>
+        UserLocalImpl()); //No tengo muy claro si lo tengo que agregar o no
+    inject.registerFactory<UsersRepository>(
+        () => UserDataImpl(localImpl: inject.get()));
+    inject.registerFactory(() => UserViewModel(usersRepository: inject.get()));
   }
 }

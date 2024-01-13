@@ -1,7 +1,18 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pick_departure_app/common/extensions/extensions.dart';
+import 'package:pick_departure_app/data/users/user_model.dart';
+import 'package:pick_departure_app/di/app_modules.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/validations_constants.dart';
+import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
+import 'package:pick_departure_app/presentation/view/authentication/viewmodel/user_viewmodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,6 +23,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final UserViewModel _userViewModel = inject.get();
   final TextEditingController _controllerUsername = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
   final FocusNode _focusNodePassword = FocusNode();
@@ -19,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = context.mediaQuerySize;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: Form(
@@ -38,10 +49,10 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 60),
               TextFormField(
                 controller: _controllerUsername,
-                keyboardType: TextInputType.name,
+                keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
-                  labelText: "Username",
+                  labelText: "Email",
                   suffixIcon: Icon(
                     Icons.person_outline,
                     color: AppTheme2.buildLightTheme().primaryColor,
@@ -55,11 +66,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 onEditingComplete: () => _focusNodePassword.requestFocus(),
                 validator: (String? value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please enter username.";
-                  }
-
-                  return null;
+                  return value!.isEmpty
+                      ? "Enter your email"
+                      : ValidationsConstants.emailRegex.hasMatch(value)
+                          ? null
+                          : "Invalid Email Address";
                 },
               ),
               const SizedBox(height: 10),
@@ -71,20 +82,21 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(
                   labelText: "Password",
                   suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          isObscure = !isObscure;
-                        });
-                      },
-                      icon: isObscure
-                          ? Icon(
-                              Icons.visibility_outlined,
-                              color: AppTheme2.buildLightTheme().primaryColor,
-                            )
-                          : Icon(
-                              Icons.visibility_off_outlined,
-                              color: AppTheme2.buildLightTheme().primaryColor,
-                            )),
+                    onPressed: () {
+                      setState(() {
+                        isObscure = !isObscure;
+                      });
+                    },
+                    icon: isObscure
+                        ? Icon(
+                            Icons.visibility_outlined,
+                            color: AppTheme2.buildLightTheme().primaryColor,
+                          )
+                        : Icon(
+                            Icons.visibility_off_outlined,
+                            color: AppTheme2.buildLightTheme().primaryColor,
+                          ),
+                  ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -107,8 +119,12 @@ class _LoginPageState extends State<LoginPage> {
                     children: [
                       Expanded(
                         child: FloatingActionButton.extended(
+                          heroTag: "fabLogin",
                           onPressed: () {
                             // Validación del usuario para continuar
+                            if (_formKey.currentState!.validate()) {
+                              _checkUserLogin();
+                            }
                           },
                           label: const Text(
                             "Login",
@@ -130,6 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: 16,
                       ),
                       FloatingActionButton(
+                        heroTag: "fabScan",
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -141,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: AppTheme2.buildLightTheme().primaryColor,
                         ),
                         onPressed: () {
-                          //_scan();
+                          _scanAndCheckLogin();
                         },
                       )
                     ],
@@ -161,5 +178,46 @@ class _LoginPageState extends State<LoginPage> {
     _controllerUsername.dispose();
     _controllerPassword.dispose();
     super.dispose();
+  }
+
+  Future<void> _scanAndCheckLogin() async {
+    String userCode;
+    try {
+      userCode = await FlutterBarcodeScanner.scanBarcode(
+          "#63d674", "Close", false, ScanMode.BARCODE);
+      debugPrint(userCode);
+    } on PlatformException {
+      userCode = "Failed to get platform version.";
+    }
+
+    if (!mounted) return;
+
+    if (userCode.isNotEmpty && userCode != "-1") {
+      UserModel? user = await _userViewModel.fetchUserByBarcode(userCode);
+
+      if (user != null) {
+        _markUserLoggedIn();
+        context.go(NavigationRoutes.ORDERS_ROUTE);
+      } else {
+        context.showSnackBar("User not found");
+      }
+    }
+  }
+
+  _checkUserLogin() async {
+    UserModel? user = await _userViewModel.fetchUserByEmailPassword(
+        _controllerUsername.text, _controllerPassword.text);
+
+    if (user != null) {
+      _markUserLoggedIn();
+      context.go(NavigationRoutes.ORDERS_ROUTE);
+    } else {
+      context.showSnackBar("Incorrect user or password, user not found");
+    }
+  }
+
+  _markUserLoggedIn() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("isLoggedIn", true);
   }
 }
