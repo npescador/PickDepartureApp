@@ -1,14 +1,14 @@
-import 'package:pick_departure_app/data/local/database_helper.dart';
+import 'package:pick_departure_app/data/local/local_database_helper.dart';
 import 'package:pick_departure_app/data/order/order_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class OrderLocalImpl {
-  final DataBaseHelper _dbHelper = DataBaseHelper();
+  final LocalDataBaseHelper _dbHelper = LocalDataBaseHelper();
 
   Future<List<OrderModel>> getOrders() async {
     Database db = await _dbHelper.getDb();
 
-    final dataBaseOrders = await db.query(DataBaseHelper.ordersTable);
+    final dataBaseOrders = await db.query(LocalDataBaseHelper.ordersTable);
     final orderList = dataBaseOrders.map((e) => OrderModel.fromMap(e));
 
     await _dbHelper.closeDb();
@@ -19,8 +19,10 @@ class OrderLocalImpl {
   Future<List<OrderDetail>> getOrderDetails(int orderId) async {
     Database db = await _dbHelper.getDb();
 
-    final dataBaseOrderDetails = await db.query(DataBaseHelper.orderDetailTable,
-        where: 'id = ?', whereArgs: [orderId]);
+    final dataBaseOrderDetails = await db.query(
+        LocalDataBaseHelper.orderDetailTable,
+        where: 'id = ?',
+        whereArgs: [orderId]);
     final orderDetailList =
         dataBaseOrderDetails.map((e) => OrderDetail.fromMap(e));
 
@@ -32,11 +34,12 @@ class OrderLocalImpl {
   addNewOrder(OrderModel order, List<OrderDetail> orderDetails) async {
     Database db = await _dbHelper.getDb();
 
-    int orderId = await db.insert(DataBaseHelper.ordersTable, order.toMap());
+    int orderId =
+        await db.insert(LocalDataBaseHelper.ordersTable, order.toMap());
 
     for (var detail in orderDetails) {
       detail.orderId = orderId;
-      await db.insert(DataBaseHelper.orderDetailTable, detail.toMap());
+      await db.insert(LocalDataBaseHelper.orderDetailTable, detail.toMap());
     }
 
     await _dbHelper.closeDb();
@@ -45,7 +48,7 @@ class OrderLocalImpl {
   updateOrderDetail(OrderDetail detail) async {
     Database db = await _dbHelper.getDb();
 
-    await db.update(DataBaseHelper.orderDetailTable, detail.toMap(),
+    await db.update(LocalDataBaseHelper.orderDetailTable, detail.toMap(),
         where: 'id = ?', whereArgs: [detail.id]);
 
     await _dbHelper.closeDb();
@@ -54,7 +57,7 @@ class OrderLocalImpl {
   deleteOrderDetail(OrderDetail detail) async {
     Database db = await _dbHelper.getDb();
 
-    await db.delete(DataBaseHelper.orderDetailTable,
+    await db.delete(LocalDataBaseHelper.orderDetailTable,
         where: 'id = ?', whereArgs: [detail.id]);
 
     await _dbHelper.closeDb();

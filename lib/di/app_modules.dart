@@ -4,6 +4,7 @@ import 'package:pick_departure_app/data/order/order_data_impl.dart';
 import 'package:pick_departure_app/data/product/local/product_local_impl.dart';
 import 'package:pick_departure_app/data/product/product_data_impl.dart';
 import 'package:pick_departure_app/data/users/local/user_local_impl.dart';
+import 'package:pick_departure_app/data/users/remote/user_remote_impl.dart';
 import 'package:pick_departure_app/data/users/user_data_impl.dart';
 import 'package:pick_departure_app/domain/orders_repository.dart';
 import 'package:pick_departure_app/domain/products_repository.dart';
@@ -16,19 +17,13 @@ final inject = GetIt.instance;
 
 class AppModules {
   setup() {
-    //_setupMainModule();
     _setupProductsModule();
     _setupOrdersModule();
     _setupUsersModule();
   }
 
-  // _setupMainModule() {
-  //   //inject.registerSingleton(NetworkClient());
-  // }
-
   _setupProductsModule() {
-    inject.registerFactory(() =>
-        ProductLocalImpl()); //No tengo muy claro si lo tengo que agregar o no
+    inject.registerFactory(() => ProductLocalImpl());
     inject.registerFactory<ProductsRepository>(
         () => ProductDataImpl(localImpl: inject.get()));
     inject.registerFactory(
@@ -36,8 +31,7 @@ class AppModules {
   }
 
   _setupOrdersModule() {
-    inject.registerFactory(() =>
-        OrderLocalImpl()); //No tengo muy claro si lo tengo que agregar o no
+    inject.registerFactory(() => OrderLocalImpl());
     inject.registerFactory<OrdersRepository>(
         () => OrderDataImpl(localImpl: inject.get()));
     inject
@@ -45,10 +39,10 @@ class AppModules {
   }
 
   _setupUsersModule() {
-    inject.registerFactory(() =>
-        UserLocalImpl()); //No tengo muy claro si lo tengo que agregar o no
+    inject.registerFactory(() => UserLocalImpl());
+    inject.registerFactory(() => UserRemoteImpl());
     inject.registerFactory<UsersRepository>(
-        () => UserDataImpl(localImpl: inject.get()));
+        () => UserDataImpl(localImpl: inject.get(), remoteImpl: inject.get()));
     inject.registerFactory(() => UserViewModel(usersRepository: inject.get()));
   }
 }

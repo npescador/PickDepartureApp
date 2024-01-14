@@ -9,7 +9,7 @@ class UserModel {
   String name;
   String password;
   String barcode;
-  int email;
+  String email;
   String phoneNumber;
 
   UserModel({

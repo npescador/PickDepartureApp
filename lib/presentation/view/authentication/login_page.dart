@@ -185,15 +185,15 @@ class _LoginPageState extends State<LoginPage> {
     try {
       userCode = await FlutterBarcodeScanner.scanBarcode(
           "#63d674", "Close", false, ScanMode.BARCODE);
-      debugPrint(userCode);
     } on PlatformException {
       userCode = "Failed to get platform version.";
     }
 
     if (!mounted) return;
 
+    UserModel? user;
     if (userCode.isNotEmpty && userCode != "-1") {
-      UserModel? user = await _userViewModel.fetchUserByBarcode(userCode);
+      user = await _userViewModel.fetchUserByBarcode(userCode);
 
       if (user != null) {
         _markUserLoggedIn();
@@ -212,7 +212,7 @@ class _LoginPageState extends State<LoginPage> {
       _markUserLoggedIn();
       context.go(NavigationRoutes.ORDERS_ROUTE);
     } else {
-      context.showSnackBar("Incorrect user or password, user not found");
+      context.showSnackBar("Email or password  is wrong");
     }
   }
 

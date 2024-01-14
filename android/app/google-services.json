@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "17529438229",
+    "project_id": "pickdepartureapp",
+    "storage_bucket": "pickdepartureapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17529438229:android:29be826c1f061f8a4f0e1c",
+        "android_client_info": {
+          "package_name": "com.example.pick_departure_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTcYFriyc857tDVbPRZQYRbQguMEtomkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

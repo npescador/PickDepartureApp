@@ -29,10 +29,14 @@ class UserViewModel extends BaseViewModel {
   }
 
   fetchUserByBarcode(String barcode) async {
-    return await _usersRepository.getUserByBarcode(barcode);
+    UserModel? user;
+    user = await _usersRepository.getUserByBarcode(barcode);
+
+    return user;
   }
 
-  fetchUserByEmailPassword(String email, String password) async {
-    return await _usersRepository.getUser(email, password);
+  Future<UserModel?> fetchUserByEmailPassword(
+      String email, String password) async {
+    return await _usersRepository.getUserByEmailPassword(email, password);
   }
 }

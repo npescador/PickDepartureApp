@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
-import 'package:pick_departure_app/data/local/database_helper.dart';
+import 'package:pick_departure_app/data/local/local_database_helper.dart';
 import 'package:pick_departure_app/data/users/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class UserLocalImpl {
-  final DataBaseHelper _dbHelper = DataBaseHelper();
+  final LocalDataBaseHelper _dbHelper = LocalDataBaseHelper();
 
   Future<List<UserModel>> getUsers() async {
     Database db = await _dbHelper.getDb();
 
-    final dataBaseUsers = await db.query(DataBaseHelper.userTable);
+    final dataBaseUsers = await db.query(LocalDataBaseHelper.userTable);
     final userList = dataBaseUsers.map((e) => UserModel.fromMap(e));
 
     await _dbHelper.closeDb();
@@ -22,7 +22,7 @@ class UserLocalImpl {
       Database db = await _dbHelper.getDb();
 
       final dataBaseUser = await db.rawQuery(
-          'SELECT * FROM ${DataBaseHelper.userTable} WHERE email = ? AND password = ?',
+          'SELECT * FROM ${LocalDataBaseHelper.userTable} WHERE email = ? AND password = ?',
           [email, password]);
 
       UserModel? user;
@@ -44,7 +44,7 @@ class UserLocalImpl {
       Database db = await _dbHelper.getDb();
 
       final dataBaseUser = await db.rawQuery(
-          'SELECT * FROM ${DataBaseHelper.userTable} WHERE barcode = ?',
+          'SELECT * FROM ${LocalDataBaseHelper.userTable} WHERE barcode = ?',
           [barcode]);
 
       UserModel? user;
