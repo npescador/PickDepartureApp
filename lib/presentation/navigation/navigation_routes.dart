@@ -7,6 +7,7 @@ import 'package:pick_departure_app/presentation/view/orders/order_list/order_lis
 import 'package:pick_departure_app/presentation/view/orders/order_preparation/order_preparation_page.dart';
 import 'package:pick_departure_app/presentation/view/products/product_list_page.dart';
 import 'package:pick_departure_app/presentation/view/splash/splash_page.dart';
+import 'package:pick_departure_app/presentation/view/users/users_list_page.dart';
 
 class NavigationRoutes {
   static const INITIAL_ROUTE = "/";
@@ -21,6 +22,9 @@ class NavigationRoutes {
 
   static const PRODUCTS_PATH = "productos";
   static const PRODUCTS_ROUTE = "$LOGIN_ROUTE/$PRODUCTS_PATH";
+
+  static const USERS_PATH = "users";
+  static const USERS_ROUTE = "$LOGIN_ROUTE/$USERS_PATH";
 
   static const _ORDER_DETAIL_PATH = "orderDetail";
   static const ORDER_DETAIL_ROUTE = "$ORDERS_ROUTE/$_ORDER_DETAIL_PATH";
@@ -51,6 +55,12 @@ final GoRouter router = GoRouter(
         branches: [
           StatefulShellBranch(routes: [
             GoRoute(
+              path: NavigationRoutes.PRODUCTS_ROUTE,
+              builder: (context, state) => const ProductsListPage(),
+            )
+          ]),
+          StatefulShellBranch(routes: [
+            GoRoute(
               path: NavigationRoutes.ORDERS_ROUTE,
               builder: (context, state) => const OrderListPage(),
               routes: [
@@ -75,8 +85,8 @@ final GoRouter router = GoRouter(
           ]),
           StatefulShellBranch(routes: [
             GoRoute(
-              path: NavigationRoutes.PRODUCTS_ROUTE,
-              builder: (context, state) => const ProductsListPage(),
+              path: NavigationRoutes.USERS_ROUTE,
+              builder: (context, state) => const UsersListPage(),
             )
           ]),
         ]),

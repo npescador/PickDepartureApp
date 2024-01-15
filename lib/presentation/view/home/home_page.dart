@@ -31,6 +31,11 @@ class _HomePageState extends State<HomePage> {
           setState(() {});
         },
         items: [
+          const BottomNavigationBarItem(
+            activeIcon: Icon(Icons.inventory),
+            icon: Icon(Icons.inventory_2_outlined),
+            label: 'Products',
+          ),
           BottomNavigationBarItem(
             activeIcon: Icon(
               MdiIcons.shopping,
@@ -40,9 +45,9 @@ class _HomePageState extends State<HomePage> {
             label: 'Orders',
           ),
           const BottomNavigationBarItem(
-            activeIcon: Icon(Icons.inventory),
-            icon: Icon(Icons.inventory_2_outlined),
-            label: 'Products',
+            activeIcon: Icon(Icons.people),
+            icon: Icon(Icons.people_outline),
+            label: 'Users',
           ),
         ],
       ),
