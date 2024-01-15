@@ -19,11 +19,11 @@ class UserDataImpl extends UsersRepository {
 
   @override
   Future<List<UserModel>> getUsers() {
-    return _localImpl.getUsers();
+    return _remoteImpl.getUsers();
   }
 
   @override
   Future<UserModel?> getUserByBarcode(String barcode) {
-    return _localImpl.getUserByBarcode(barcode);
+    return _remoteImpl.getUserByBarcode(barcode);
   }
 }

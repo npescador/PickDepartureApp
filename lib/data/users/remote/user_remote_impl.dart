@@ -10,7 +10,7 @@ class UserRemoteImpl extends UsersRepository {
   @override
   Future<UserModel?> getUserByBarcode(String barcode) async {
     UserModel? user;
-    _firestore
+    await _firestore
         .collection("users")
         .where("barcode", isEqualTo: barcode)
         .get()
@@ -28,7 +28,7 @@ class UserRemoteImpl extends UsersRepository {
   Future<UserModel?> getUserByEmailPassword(
       String email, String password) async {
     UserModel? user;
-    _firestore
+    await _firestore
         .collection("users")
         .where("email", isEqualTo: email)
         .where("password", isEqualTo: password)
@@ -46,7 +46,7 @@ class UserRemoteImpl extends UsersRepository {
   @override
   Future<List<UserModel>> getUsers() async {
     List<UserModel> users = [];
-    _firestore.collection("users").get().then((querySnapshot) {
+    await _firestore.collection("users").get().then((querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         for (var element in querySnapshot.docs) {
           users.add(UserModel.fromMap(element.data()));

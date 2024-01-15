@@ -11,6 +11,12 @@ class UserViewModel extends BaseViewModel {
   final StreamController<ResourceState<List<UserModel>>> getUsersState =
       StreamController();
 
+  final StreamController<ResourceState<UserModel?>> getUsersEmailPasswordState =
+      StreamController();
+
+  final StreamController<ResourceState<UserModel?>> getUsersBarcodeState =
+      StreamController();
+
   UserViewModel({required UsersRepository usersRepository})
       : _usersRepository = usersRepository;
 
@@ -29,14 +35,25 @@ class UserViewModel extends BaseViewModel {
   }
 
   fetchUserByBarcode(String barcode) async {
-    UserModel? user;
-    user = await _usersRepository.getUserByBarcode(barcode);
+    getUsersBarcodeState.add(ResourceState.loading());
 
-    return user;
+    _usersRepository
+        .getUserByBarcode(barcode)
+        .then((value) => getUsersBarcodeState.add(ResourceState.success(value)))
+        .catchError(
+            (error) => getUsersBarcodeState.add(ResourceState.error(error)));
   }
 
-  Future<UserModel?> fetchUserByEmailPassword(
-      String email, String password) async {
-    return await _usersRepository.getUserByEmailPassword(email, password);
+  fetchUserByEmailPassword(String email, String password) {
+    getUsersEmailPasswordState.add(ResourceState.loading());
+
+    _usersRepository
+        .getUserByEmailPassword(email, password)
+        .then((value) =>
+            getUsersEmailPasswordState.add(ResourceState.success(value)))
+        .catchError((error) =>
+            getUsersEmailPasswordState.add(ResourceState.error(error)));
+
+    //return await _usersRepository.getUserByEmailPassword(email, password);
   }
 }

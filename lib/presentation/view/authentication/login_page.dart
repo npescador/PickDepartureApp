@@ -10,8 +10,11 @@ import 'package:pick_departure_app/data/users/user_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 import 'package:pick_departure_app/presentation/constants/validations_constants.dart';
+import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/authentication/viewmodel/user_viewmodel.dart';
+import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
+import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -28,6 +31,68 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerPassword = TextEditingController();
   final FocusNode _focusNodePassword = FocusNode();
   bool isObscure = true;
+  UserModel? _user;
+  String _userBarcode = "";
+
+  @override
+  void initState() {
+    super.initState();
+
+    _userViewModel.getUsersEmailPasswordState.stream.listen((state) {
+      switch (state.status) {
+        case Status.LOADING:
+          LoadingView.show(context);
+          break;
+        case Status.SUCCESS:
+          LoadingView.hide();
+          setState(() {
+            _user = state.data;
+
+            if (_user != null) {
+              _markUserLoggedIn();
+              context.go(NavigationRoutes.ORDERS_ROUTE);
+            } else {
+              context.showSnackBar("Email or password incorrect");
+            }
+          });
+          break;
+        case Status.ERROR:
+          LoadingView.hide();
+          ErrorView.show(context, state.exception!.toString(), () {
+            _userViewModel.fetchUserByEmailPassword(
+                _controllerUsername.text, _controllerPassword.text);
+          });
+          break;
+      }
+    });
+
+    _userViewModel.getUsersBarcodeState.stream.listen((state) {
+      switch (state.status) {
+        case Status.LOADING:
+          LoadingView.show(context);
+          break;
+        case Status.SUCCESS:
+          LoadingView.hide();
+          setState(() {
+            _user = state.data;
+
+            if (_user != null) {
+              _markUserLoggedIn();
+              context.go(NavigationRoutes.ORDERS_ROUTE);
+            } else {
+              context.showSnackBar("User not found");
+            }
+          });
+          break;
+        case Status.ERROR:
+          LoadingView.hide();
+          ErrorView.show(context, state.exception!.toString(), () {
+            _userViewModel.fetchUserByBarcode(_userBarcode);
+          });
+          break;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,43 +242,38 @@ class _LoginPageState extends State<LoginPage> {
     _focusNodePassword.dispose();
     _controllerUsername.dispose();
     _controllerPassword.dispose();
+    _userViewModel.dispose();
     super.dispose();
   }
 
   Future<void> _scanAndCheckLogin() async {
-    String userCode;
     try {
-      userCode = await FlutterBarcodeScanner.scanBarcode(
+      _userBarcode = await FlutterBarcodeScanner.scanBarcode(
           "#63d674", "Close", false, ScanMode.BARCODE);
     } on PlatformException {
-      userCode = "Failed to get platform version.";
+      _userBarcode = "Failed to get platform version.";
     }
 
     if (!mounted) return;
 
-    UserModel? user;
-    if (userCode.isNotEmpty && userCode != "-1") {
-      user = await _userViewModel.fetchUserByBarcode(userCode);
-
-      if (user != null) {
-        _markUserLoggedIn();
-        context.go(NavigationRoutes.ORDERS_ROUTE);
-      } else {
-        context.showSnackBar("User not found");
-      }
+    if (_userBarcode.isNotEmpty && _userBarcode != "-1") {
+      await _userViewModel.fetchUserByBarcode(_userBarcode);
     }
   }
 
   _checkUserLogin() async {
-    UserModel? user = await _userViewModel.fetchUserByEmailPassword(
+    _userViewModel.fetchUserByEmailPassword(
         _controllerUsername.text, _controllerPassword.text);
 
-    if (user != null) {
-      _markUserLoggedIn();
-      context.go(NavigationRoutes.ORDERS_ROUTE);
-    } else {
-      context.showSnackBar("Email or password  is wrong");
-    }
+    // UserModel? user = await _userViewModel.fetchUserByEmailPassword(
+    //     _controllerUsername.text, _controllerPassword.text);
+
+    // if (user != null) {
+    //   _markUserLoggedIn();
+    //   context.go(NavigationRoutes.ORDERS_ROUTE);
+    // } else {
+    //   context.showSnackBar("Email or password  is wrong");
+    // }
   }
 
   _markUserLoggedIn() async {
