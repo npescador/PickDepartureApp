@@ -1,13 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:pick_departure_app/data/product/local/product_local_impl.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
+import 'package:pick_departure_app/data/product/remote/product_remote_impl.dart';
 import 'package:pick_departure_app/domain/products_repository.dart';
 
 class ProductDataImpl extends ProductsRepository {
   final ProductLocalImpl _localImpl;
+  final ProductRemoteImpl _remoteImpl;
 
-  ProductDataImpl({required ProductLocalImpl localImpl})
-      : _localImpl = localImpl;
+  ProductDataImpl(
+      {required ProductLocalImpl localImpl,
+      required ProductRemoteImpl remoteImpl})
+      : _localImpl = localImpl,
+        _remoteImpl = remoteImpl;
 
   @override
   addProduct(ProductModel product) {
@@ -15,18 +19,27 @@ class ProductDataImpl extends ProductsRepository {
   }
 
   @override
-  Future<List<ProductModel>> getProducts() {
+  Future<List<ProductModel>> getRemoteProducts() {
+    return _remoteImpl.getProducts();
+  }
+
+  @override
+  Future<List<ProductModel>> getLocalProducts() {
     return _localImpl.getProducts();
   }
 
   @override
   Future<ProductModel?> getProductByBarcode(String barcode) async {
-    debugPrint("Llamada a local data impl");
-    return await _localImpl.getProductByBarcode(barcode);
+    return await _remoteImpl.getProductByBarcode(barcode);
   }
 
   @override
   updateProduct(ProductModel product) {
-    _localImpl.updateProduct(product);
+    _remoteImpl.updateProduct(product);
+  }
+
+  @override
+  addProducts(List<ProductModel> products) {
+    _localImpl.addProducts(products);
   }
 }

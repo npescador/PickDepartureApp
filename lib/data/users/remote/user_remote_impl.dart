@@ -8,7 +8,7 @@ class UserRemoteImpl extends UsersRepository {
   final _firestore = FirebaseFirestore.instance;
 
   @override
-  Future<UserModel?> getUserByBarcode(String barcode) async {
+  Future<UserModel?> getOrtderByORderCode(String barcode) async {
     UserModel? user;
     await _firestore
         .collection("users")

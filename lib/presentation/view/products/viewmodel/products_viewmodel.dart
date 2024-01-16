@@ -31,14 +31,10 @@ class ProductsViewModel extends BaseViewModel {
     getProductsState.add(ResourceState.loading());
 
     _productsRepository
-        .getProducts()
+        .getRemoteProducts()
         .then((value) => getProductsState.add(ResourceState.success(value)))
         .catchError(
             (error) => getProductsState.add(ResourceState.error(error)));
-  }
-
-  Future<List<ProductModel>> reloadProductList() async {
-    return await _productsRepository.getProducts();
   }
 
   // ignore: body_might_complete_normally_nullable
@@ -50,6 +46,10 @@ class ProductsViewModel extends BaseViewModel {
     //         (value) => getProductBarcodeState.add(ResourceState.success(value)))
     //     .catchError(
     //         (error) => getProductBarcodeState.add(ResourceState.error(error)));
+  }
+
+  sincronizeProductsToLocal() {
+    _productsRepository.getRemoteProducts().then((value) => addProducts(value));
   }
 
   updateProduct(ProductModel product) {
@@ -69,5 +69,9 @@ class ProductsViewModel extends BaseViewModel {
 
     _productsRepository.addProduct(product);
     //.catchError((error) => addProductState.add(ResourceState.error(error)));
+  }
+
+  addProducts(List<ProductModel> products) {
+    _productsRepository.addProducts(products);
   }
 }

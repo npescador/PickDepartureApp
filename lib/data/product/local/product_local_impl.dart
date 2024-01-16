@@ -25,6 +25,16 @@ class ProductLocalImpl {
     await _dbHelper.closeDb();
   }
 
+  addProducts(List<ProductModel> products) async {
+    for (ProductModel product in products) {
+      Database db = await _dbHelper.getDb();
+      await db.insert(LocalDataBaseHelper.productTable, product.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
+    }
+
+    await _dbHelper.closeDb();
+  }
+
   updateProduct(ProductModel product) async {
     Database db = await _dbHelper.getDb();
 

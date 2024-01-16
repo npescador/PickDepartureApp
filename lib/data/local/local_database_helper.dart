@@ -26,7 +26,7 @@ class LocalDataBaseHelper {
 
   _createTables(Database db) async {
     db.execute(
-        "CREATE TABLE IF NOT EXISTS ${LocalDataBaseHelper.productTable} (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, barcode TEXT, stock INTEGER)");
+        "CREATE TABLE IF NOT EXISTS ${LocalDataBaseHelper.productTable} (id TEXT PRIMARY KEY, name TEXT, description TEXT, barcode TEXT, stock INTEGER)");
     db.execute(
         "CREATE TABLE IF NOT EXISTS ${LocalDataBaseHelper.ordersTable} (id INTEGER PRIMARY KEY AUTOINCREMENT, orderCode TEXT, createAt TEXT, status TEXT)");
     db.execute(

@@ -6,7 +6,7 @@ import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/viewmodel/orders_viewmodel.dart';
-import 'package:pick_departure_app/presentation/widget/custom_body_list_view.dart';
+import 'package:pick_departure_app/presentation/widget/custom_body_view.dart';
 import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
 import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
@@ -60,6 +60,7 @@ class _OrderListPageState extends State<OrderListPage>
   @override
   void dispose() {
     animationController.dispose();
+    _ordersViewModel.dispose();
     _scrollController.dispose();
     super.dispose();
   }
@@ -89,9 +90,9 @@ class _OrderListPageState extends State<OrderListPage>
           ),
         ],
       ),
-      body: CustomBodyListView(
+      body: CustomBodyView(
         scrollController: _scrollController,
-        listWidget: ListView.builder(
+        bodyChildWidget: ListView.builder(
           itemCount: _orders.length,
           padding: const EdgeInsets.only(top: 8),
           itemBuilder: (BuildContext context, int index) {
@@ -103,7 +104,10 @@ class _OrderListPageState extends State<OrderListPage>
                         curve: Curves.fastOutSlowIn)));
             animationController.forward();
             return CustomListView(
-              callback: () {},
+              callback: () {
+                context.go(NavigationRoutes.ORDER_DETAIL_ROUTE,
+                    extra: _orders[index]);
+              },
               itemRow: OrderRowItem(order: _orders[index]),
               animation: animation,
               animationController: animationController,

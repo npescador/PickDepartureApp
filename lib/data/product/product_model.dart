@@ -1,12 +1,14 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 ProductModel productModelFromMap(String str) =>
     ProductModel.fromMap(json.decode(str));
 
 String productModelToMap(ProductModel data) => json.encode(data.toMap());
 
 class ProductModel {
-  int id;
+  String id;
   String name;
   String description;
   String barcode;
@@ -27,6 +29,27 @@ class ProductModel {
         barcode: json["barcode"],
         stock: json["stock"],
       );
+
+  factory ProductModel.fromFirestore(Map<String, dynamic> json, String id) =>
+      ProductModel(
+        id: id,
+        name: json["name"],
+        description: json["description"],
+        barcode: json["barcode"],
+        stock: json["stock"],
+      );
+
+  factory ProductModel.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    Map<String, dynamic> data = snapshot.data()!;
+    return ProductModel(
+      id: snapshot.id,
+      name: data['name'] ?? '',
+      description: data['description'] ?? '',
+      barcode: data['barcode'] ?? '',
+      stock: data['stock'] ?? 0,
+    );
+  }
 
   Map<String, dynamic> toMap() => {
         "id": id,

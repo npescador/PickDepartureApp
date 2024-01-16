@@ -6,6 +6,7 @@ import 'package:pick_departure_app/di/app_modules.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/view/authentication/viewmodel/user_viewmodel.dart';
+import 'package:pick_departure_app/presentation/widget/custom_body_view.dart';
 import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
 import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
@@ -66,75 +67,39 @@ class _UsersListPageState extends State<UsersListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppTheme2.buildLightTheme().primaryColor,
-        title: const Text("Users",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 22,
-            )),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Material(
-          child: Theme(
-            data: AppTheme2.buildLightTheme(),
-            child: Stack(
-              children: [
-                InkWell(
-                  splashColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  onTap: () {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  },
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: NestedScrollView(
-                          headerSliverBuilder:
-                              (BuildContext context, bool innerBoxIsScrolled) {
-                            return [];
-                          },
-                          controller: _scrollController,
-                          body: Container(
-                            color: AppTheme2.buildLightTheme()
-                                .colorScheme
-                                .background,
-                            child: ListView.builder(
-                              itemCount: _users.length,
-                              padding: const EdgeInsets.only(top: 8),
-                              itemBuilder: (BuildContext context, int index) {
-                                final int count =
-                                    _users.length > 10 ? 10 : _users.length;
-                                final Animation<double> animation =
-                                    Tween<double>(begin: 0.0, end: 1.0).animate(
-                                        CurvedAnimation(
-                                            parent: animationController,
-                                            curve: Interval(
-                                                (1 / count) * index, 1.0,
-                                                curve: Curves.fastOutSlowIn)));
-                                animationController.forward();
-                                return CustomListView(
-                                  callback: () {},
-                                  itemRow: UserRowItem(user: _users[index]),
-                                  animation: animation,
-                                  animationController: animationController,
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+        appBar: AppBar(
+          backgroundColor: AppTheme2.buildLightTheme().primaryColor,
+          title: const Text("Users",
+              style: TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 22,
+              )),
+          centerTitle: true,
+        ),
+        body: CustomBodyView(
+          scrollController: _scrollController,
+          bodyChildWidget: Container(
+            color: AppTheme2.buildLightTheme().colorScheme.background,
+            child: ListView.builder(
+              itemCount: _users.length,
+              padding: const EdgeInsets.only(top: 8),
+              itemBuilder: (BuildContext context, int index) {
+                final int count = _users.length > 10 ? 10 : _users.length;
+                final Animation<double> animation =
+                    Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+                        parent: animationController,
+                        curve: Interval((1 / count) * index, 1.0,
+                            curve: Curves.fastOutSlowIn)));
+                animationController.forward();
+                return CustomListView(
+                  callback: () {},
+                  itemRow: UserRowItem(user: _users[index]),
+                  animation: animation,
+                  animationController: animationController,
+                );
+              },
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }

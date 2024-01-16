@@ -1,11 +1,16 @@
 import 'package:pick_departure_app/data/order/local/order_local_impl.dart';
 import 'package:pick_departure_app/data/order/order_model.dart';
+import 'package:pick_departure_app/data/order/remote/order_remote_impl.dart';
 import 'package:pick_departure_app/domain/orders_repository.dart';
 
 class OrderDataImpl extends OrdersRepository {
   final OrderLocalImpl _localImpl;
+  final OrderRemoteImpl _remoteImpl;
 
-  OrderDataImpl({required OrderLocalImpl localImpl}) : _localImpl = localImpl;
+  OrderDataImpl(
+      {required OrderLocalImpl localImpl, required OrderRemoteImpl remoteImpl})
+      : _localImpl = localImpl,
+        _remoteImpl = remoteImpl;
 
   @override
   addNewOrder(OrderModel order, List<OrderDetail> orderDetails) {
@@ -19,12 +24,12 @@ class OrderDataImpl extends OrdersRepository {
 
   @override
   Future<List<OrderDetail>> getOrderDetails(int orderId) {
-    return _localImpl.getOrderDetails(orderId);
+    return _remoteImpl.getOrderDetails(orderId);
   }
 
   @override
   Future<List<OrderModel>> getOrders() {
-    return _localImpl.getOrders();
+    return _remoteImpl.getOrders();
   }
 
   @override

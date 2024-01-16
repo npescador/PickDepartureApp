@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,9 +17,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: widget.navigationShell,
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: AppTheme2.buildLightTheme().primaryColor,
+        selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.black,
+        backgroundColor: AppTheme2.buildLightTheme().primaryColor,
         type: BottomNavigationBarType.fixed,
         currentIndex: widget.navigationShell.currentIndex,
         onTap: (index) {
@@ -30,21 +29,20 @@ class _HomePageState extends State<HomePage> {
           );
           setState(() {});
         },
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
             activeIcon: Icon(Icons.inventory),
             icon: Icon(Icons.inventory_2_outlined),
             label: 'Products',
           ),
           BottomNavigationBarItem(
             activeIcon: Icon(
-              MdiIcons.shopping,
-              color: AppTheme2.buildLightTheme().primaryColor,
+              Icons.shopping_bag,
             ),
-            icon: Icon(MdiIcons.shoppingOutline),
+            icon: Icon(Icons.shopping_bag_outlined),
             label: 'Orders',
           ),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
             activeIcon: Icon(Icons.people),
             icon: Icon(Icons.people_outline),
             label: 'Users',

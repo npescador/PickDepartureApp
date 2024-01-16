@@ -70,6 +70,8 @@ class _ProductsListPageState extends State<ProductsListPage>
     _productsViewModel.dispose();
     animationController.dispose();
     _scrollController.dispose();
+    nameController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
@@ -270,13 +272,12 @@ class _ProductsListPageState extends State<ProductsListPage>
 
     if (barcodeScanRes.isNotEmpty && barcodeScanRes != "-1") {
       _result = barcodeScanRes;
-      debugPrint(
-          "Comenzamos la comprobación de existencia del código de barras");
-      ProductModel? productScanned =
-          await _productsViewModel.fetchProductByBarcode(barcodeScanRes);
 
-      debugPrint("Ya tenemos el resultado");
-      if (productScanned != null) {
+      if (_products.isNotEmpty &&
+          _products.any((element) => element.barcode == barcodeScanRes)) {
+        ProductModel productScanned = _products
+            .firstWhere((element) => element.barcode == barcodeScanRes);
+
         productScanned.stock += 1;
         _productsViewModel.updateProduct(productScanned);
         _productsViewModel.fetchProducts();
@@ -326,7 +327,7 @@ class _ProductsListPageState extends State<ProductsListPage>
 
   _addNewProduct() {
     ProductModel newProduct = ProductModel(
-      id: UniqueKey().hashCode,
+      id: "",
       name: nameController.text,
       description: descriptionController.text,
       barcode: _result,

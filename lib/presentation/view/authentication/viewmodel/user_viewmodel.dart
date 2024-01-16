@@ -38,7 +38,7 @@ class UserViewModel extends BaseViewModel {
     getUsersBarcodeState.add(ResourceState.loading());
 
     _usersRepository
-        .getUserByBarcode(barcode)
+        .getOrtderByORderCode(barcode)
         .then((value) => getUsersBarcodeState.add(ResourceState.success(value)))
         .catchError(
             (error) => getUsersBarcodeState.add(ResourceState.error(error)));

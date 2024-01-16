@@ -13,6 +13,9 @@ class OrdersViewModel extends BaseViewModel {
   final StreamController<ResourceState<List<OrderModel>>> getOrdersState =
       StreamController();
 
+  final StreamController<ResourceState<List<OrderDetail>>>
+      getOrderDetailsState = StreamController();
+
   final StreamController<ResourceState<void>> addOrderState =
       StreamController();
 
@@ -38,5 +41,15 @@ class OrdersViewModel extends BaseViewModel {
     addOrderState.add(ResourceState.loading());
 
     _ordersRepository.addNewOrder(order, orderDetails);
+  }
+
+  fetchOrderDetails(int orderId) {
+    getOrderDetailsState.add(ResourceState.loading());
+
+    _ordersRepository
+        .getOrderDetails(orderId)
+        .then((value) => getOrderDetailsState.add(ResourceState.success(value)))
+        .catchError(
+            (error) => getOrderDetailsState.add(ResourceState.error(error)));
   }
 }

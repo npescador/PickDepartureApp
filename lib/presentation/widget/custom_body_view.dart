@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 
-class CustomBodyListView extends StatelessWidget {
-  const CustomBodyListView({
+class CustomBodyView extends StatelessWidget {
+  const CustomBodyView({
     super.key,
     required this.scrollController,
-    required this.listWidget,
+    required this.bodyChildWidget,
   });
 
   final ScrollController scrollController;
-  final Widget listWidget;
+  final Widget bodyChildWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class CustomBodyListView extends StatelessWidget {
                           color: AppTheme2.buildLightTheme()
                               .colorScheme
                               .background,
-                          child: listWidget,
+                          child: bodyChildWidget,
                         ),
                       ),
                     )

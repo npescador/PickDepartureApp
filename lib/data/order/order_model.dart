@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 OrderModel orderModelFromMap(String str) =>
     OrderModel.fromMap(json.decode(str));
 
@@ -12,16 +14,14 @@ String orderModelToMap(OrderModel data) => json.encode(data.toMap());
 class OrderModel {
   int id;
   String orderCode;
-  String createAt;
+  Timestamp createAt;
   String status;
-  List<OrderDetail> orderDetails;
 
   OrderModel({
     required this.id,
     required this.orderCode,
     required this.createAt,
     required this.status,
-    required this.orderDetails,
   });
 
   factory OrderModel.fromMap(Map<String, dynamic> json) => OrderModel(
@@ -29,8 +29,6 @@ class OrderModel {
         orderCode: json["orderCode"],
         createAt: json["createAt"],
         status: json["status"],
-        orderDetails: List<OrderDetail>.from(
-            json["orderDetails"].map((x) => OrderDetail.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -38,17 +36,16 @@ class OrderModel {
         "orderCode": orderCode,
         "createAt": createAt,
         "status": status,
-        "orderDetails": List<dynamic>.from(orderDetails.map((x) => x.toMap())),
       };
 }
 
 class OrderDetail {
   int id;
   int orderId;
-  int productId;
+  String productId;
   int amount;
   String description;
-  int? pendingAmount;
+  int pendingAmount;
 
   OrderDetail({
     required this.id,
