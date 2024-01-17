@@ -1,16 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pick_departure_app/data/users/user_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
+import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/authentication/viewmodel/user_viewmodel.dart';
 import 'package:pick_departure_app/presentation/widget/custom_body_view.dart';
 import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
 import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
 import 'package:pick_departure_app/presentation/widget/user/user_row_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UsersListPage extends StatefulWidget {
   const UsersListPage({super.key});
@@ -75,6 +78,17 @@ class _UsersListPageState extends State<UsersListPage>
                 fontSize: 22,
               )),
           centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.logout_outlined,
+              color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+            ),
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setBool("isLoggedIn", false);
+              context.pushReplacementNamed(NavigationRoutes.LOGIN_ROUTE);
+            },
+          ),
         ),
         body: CustomBodyView(
           scrollController: _scrollController,

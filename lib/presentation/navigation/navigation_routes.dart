@@ -1,11 +1,8 @@
 import 'package:go_router/go_router.dart';
-import 'package:pick_departure_app/data/order/order_model.dart';
 import 'package:pick_departure_app/presentation/view/authentication/login_page.dart';
 import 'package:pick_departure_app/presentation/view/home/home_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/new_order/new_order_page.dart';
-import 'package:pick_departure_app/presentation/view/orders/order_detail/order_detail_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/order_list_page.dart';
-import 'package:pick_departure_app/presentation/view/orders/order_preparation/order_preparation_page.dart';
 import 'package:pick_departure_app/presentation/view/products/product_list_page.dart';
 import 'package:pick_departure_app/presentation/view/splash/splash_page.dart';
 import 'package:pick_departure_app/presentation/view/users/users_list_page.dart';
@@ -32,10 +29,6 @@ class NavigationRoutes {
 
   static const _NEW_ORDER_PATH = "newOrder";
   static const NEW_ORDER_ROUTE = "$ORDERS_ROUTE/$_NEW_ORDER_PATH";
-
-  static const _ORDER_PREPARATION_PATH = "orderPreparation";
-  static const ORDER_PREAPARATION_ROUTE =
-      "$ORDERS_ROUTE/$_ORDER_DETAIL_PATH/$_ORDER_PREPARATION_PATH";
 }
 
 final GoRouter router = GoRouter(
@@ -65,17 +58,6 @@ final GoRouter router = GoRouter(
               path: NavigationRoutes.ORDERS_ROUTE,
               builder: (context, state) => const OrderListPage(),
               routes: [
-                GoRoute(
-                  path: NavigationRoutes._ORDER_DETAIL_PATH,
-                  builder: (context, state) =>
-                      OrderDetailPage(order: state.extra as OrderModel),
-                  routes: [
-                    GoRoute(
-                      path: NavigationRoutes._ORDER_PREPARATION_PATH,
-                      builder: (context, state) => const OrderPreparationPage(),
-                    )
-                  ],
-                ),
                 GoRoute(
                   path: NavigationRoutes._NEW_ORDER_PATH,
                   builder: (context, state) => NewOrderPage(

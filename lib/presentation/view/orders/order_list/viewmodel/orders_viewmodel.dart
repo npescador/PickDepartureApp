@@ -37,13 +37,7 @@ class OrdersViewModel extends BaseViewModel {
         .catchError((error) => getOrdersState.add(ResourceState.error(error)));
   }
 
-  addOrder(OrderModel order, List<OrderDetail> orderDetails) {
-    addOrderState.add(ResourceState.loading());
-
-    _ordersRepository.addNewOrder(order, orderDetails);
-  }
-
-  fetchOrderDetails(int orderId) {
+  fetchOrderDetails(String orderId) {
     getOrderDetailsState.add(ResourceState.loading());
 
     _ordersRepository
@@ -51,5 +45,13 @@ class OrdersViewModel extends BaseViewModel {
         .then((value) => getOrderDetailsState.add(ResourceState.success(value)))
         .catchError(
             (error) => getOrderDetailsState.add(ResourceState.error(error)));
+  }
+
+  updateOrderDetail(OrderDetail detail) {
+    _ordersRepository.updateOrderDetail(detail);
+  }
+
+  updateOrder(OrderModel order) {
+    _ordersRepository.updateOrder(order);
   }
 }

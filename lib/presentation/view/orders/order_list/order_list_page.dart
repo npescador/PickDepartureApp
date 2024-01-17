@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pick_departure_app/data/order/order_model.dart';
@@ -11,6 +13,7 @@ import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
 import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
 import 'package:pick_departure_app/presentation/widget/order/order_row_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderListPage extends StatefulWidget {
   const OrderListPage({super.key});
@@ -79,15 +82,26 @@ class _OrderListPageState extends State<OrderListPage>
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => {
-              context.go(NavigationRoutes.NEW_ORDER_ROUTE, extra: () {
-                _ordersViewModel.fetchOrders();
-              })
-            },
+        leading: IconButton(
+          icon: Icon(
+            Icons.logout_outlined,
+            color: AppTheme2.buildLightTheme().secondaryHeaderColor,
           ),
+          onPressed: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setBool("isLoggedIn", false);
+            context.pushReplacement(NavigationRoutes.LOGIN_ROUTE);
+          },
+        ),
+        actions: const [
+          // IconButton(
+          //   icon: const Icon(Icons.add),
+          //   onPressed: () => {
+          //     context.go(NavigationRoutes.NEW_ORDER_ROUTE, extra: () {
+          //       _ordersViewModel.fetchOrders();
+          //     })
+          //   },
+          // ),
         ],
       ),
       body: CustomBodyView(
@@ -105,8 +119,12 @@ class _OrderListPageState extends State<OrderListPage>
             animationController.forward();
             return CustomListView(
               callback: () {
-                context.go(NavigationRoutes.ORDER_DETAIL_ROUTE,
-                    extra: _orders[index]);
+                context
+                    .push(NavigationRoutes.ORDER_DETAIL_ROUTE,
+                        extra: _orders[index])
+                    .then((value) => _ordersViewModel.fetchOrders());
+
+                //context.go(NavigationRoutes.ORDER_DETAIL_ROUTE,extra: _orders[index]);
               },
               itemRow: OrderRowItem(order: _orders[index]),
               animation: animation,

@@ -3,18 +3,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pick_departure_app/common/extensions/extensions.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
+import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/search/product_search_delegate.dart';
 import 'package:pick_departure_app/presentation/view/products/viewmodel/products_viewmodel.dart';
 import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
 import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
 import 'package:pick_departure_app/presentation/widget/product/product_row_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductsListPage extends StatefulWidget {
   const ProductsListPage({super.key});
@@ -86,6 +89,17 @@ class _ProductsListPageState extends State<ProductsListPage>
               fontSize: 22,
             )),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.logout_outlined,
+            color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+          ),
+          onPressed: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setBool("isLoggedIn", false);
+            context.pushReplacementNamed(NavigationRoutes.LOGIN_ROUTE);
+          },
+        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -281,7 +295,7 @@ class _ProductsListPageState extends State<ProductsListPage>
         productScanned.stock += 1;
         _productsViewModel.updateProduct(productScanned);
         _productsViewModel.fetchProducts();
-        context.showSnackBar("Entrada del producto realizada");
+        context.showSnackBar("Product entry done");
         setState(() {
           _showNewProductForm = false;
         });
@@ -291,9 +305,9 @@ class _ProductsListPageState extends State<ProductsListPage>
           context: context,
           builder: (BuildContext dialogContext) {
             return AlertDialog(
-              title: const Text("Producto no encontrado"),
+              title: const Text("Product not found"),
               content: const Text(
-                  "¿Desea agregar un nuevo producto con este código de barras?"),
+                  "¿You want to add a new product with this barcode?"),
               actions: [
                 TextButton(
                   onPressed: () {

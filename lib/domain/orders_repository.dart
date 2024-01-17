@@ -4,8 +4,8 @@ import 'package:pick_departure_app/data/order/order_model.dart';
 
 abstract class OrdersRepository {
   Future<List<OrderModel>> getOrders();
-  Future<List<OrderDetail>> getOrderDetails(int orderId);
-  addNewOrder(OrderModel order, List<OrderDetail> orderDetails);
+  Future<List<OrderDetail>> getOrderDetails(String orderId);
   updateOrderDetail(OrderDetail detail);
+  updateOrder(OrderModel order);
   deleteOrderDetail(OrderDetail detail);
 }

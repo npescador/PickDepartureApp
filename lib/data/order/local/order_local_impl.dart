@@ -9,10 +9,9 @@ class OrderLocalImpl {
     Database db = await _dbHelper.getDb();
 
     final dataBaseOrders = await db.query(LocalDataBaseHelper.ordersTable);
-    final orderList = dataBaseOrders.map((e) => OrderModel.fromMap(e));
+    final orderList = dataBaseOrders.map((e) => OrderModel.fromLocalMap(e));
 
     await _dbHelper.closeDb();
-
     return orderList.toList();
   }
 
@@ -29,20 +28,6 @@ class OrderLocalImpl {
     await _dbHelper.closeDb();
 
     return orderDetailList.toList();
-  }
-
-  addNewOrder(OrderModel order, List<OrderDetail> orderDetails) async {
-    Database db = await _dbHelper.getDb();
-
-    int orderId =
-        await db.insert(LocalDataBaseHelper.ordersTable, order.toMap());
-
-    for (var detail in orderDetails) {
-      detail.orderId = orderId;
-      await db.insert(LocalDataBaseHelper.orderDetailTable, detail.toMap());
-    }
-
-    await _dbHelper.closeDb();
   }
 
   updateOrderDetail(OrderDetail detail) async {

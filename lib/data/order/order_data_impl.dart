@@ -13,17 +13,12 @@ class OrderDataImpl extends OrdersRepository {
         _remoteImpl = remoteImpl;
 
   @override
-  addNewOrder(OrderModel order, List<OrderDetail> orderDetails) {
-    _localImpl.addNewOrder(order, orderDetails);
-  }
-
-  @override
   deleteOrderDetail(OrderDetail detail) {
     _localImpl.deleteOrderDetail(detail);
   }
 
   @override
-  Future<List<OrderDetail>> getOrderDetails(int orderId) {
+  Future<List<OrderDetail>> getOrderDetails(String orderId) {
     return _remoteImpl.getOrderDetails(orderId);
   }
 
@@ -34,6 +29,11 @@ class OrderDataImpl extends OrdersRepository {
 
   @override
   updateOrderDetail(OrderDetail detail) {
-    _localImpl.updateOrderDetail(detail);
+    _remoteImpl.updateOrderDetail(detail);
+  }
+
+  @override
+  updateOrder(OrderModel order) {
+    _remoteImpl.updateOrder(order);
   }
 }

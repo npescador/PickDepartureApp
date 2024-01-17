@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pick_departure_app/common/extensions/extensions.dart';
@@ -11,6 +12,7 @@ import 'package:pick_departure_app/data/product/product_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
 import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
+import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/viewmodel/orders_viewmodel.dart';
 import 'package:pick_departure_app/presentation/view/products/viewmodel/products_viewmodel.dart';
 import 'package:pick_departure_app/presentation/widget/custom_body_view.dart';
@@ -18,11 +20,12 @@ import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
 import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
 import 'package:pick_departure_app/presentation/widget/order_detail/order_detail_row_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  const OrderDetailPage({super.key, required this.order});
+  OrderDetailPage({super.key, required this.order});
 
-  final OrderModel order;
+  OrderModel order;
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();
@@ -106,6 +109,17 @@ class _OrderDetailPageState extends State<OrderDetailPage>
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.logout_outlined,
+            color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+          ),
+          onPressed: () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            await prefs.setBool("isLoggedIn", false);
+            context.pushReplacementNamed(NavigationRoutes.LOGIN_ROUTE);
+          },
+        ),
       ),
       floatingActionButton: Visibility(
         visible: _showScanButton,
@@ -190,6 +204,25 @@ class _OrderDetailPageState extends State<OrderDetailPage>
     );
   }
 
+  _checkStatusOrder() async {
+    bool allDetailsPendinAmountZero =
+        _details.every((element) => element.pendingAmount == 0);
+    if (allDetailsPendinAmountZero) {
+      widget.order.status = "Completed";
+      _orderStatusColor = AppTheme2.buildLightTheme().primaryColor;
+      _showScanButton = false;
+    } else if (_details
+        .any((element) => element.amount != element.pendingAmount)) {
+      widget.order.status = "In preparation process";
+      _orderStatusColor = Colors.amber;
+    } else {
+      widget.order.status = "Created";
+      _orderStatusColor = Colors.blueAccent;
+    }
+
+    await _ordersViewModel.updateOrder(widget.order);
+  }
+
   Future<void> _scan() async {
     String barcodeScanRes;
     try {
@@ -219,9 +252,14 @@ class _OrderDetailPageState extends State<OrderDetailPage>
               productScanned.stock -= 1;
               orderDetail.pendingAmount -= 1;
               _productsViewModel.updateProduct(productScanned);
-              _productsViewModel.fetchProducts();
-              context.showSnackBar("Entrada del producto realizada");
+              _ordersViewModel.updateOrderDetail(orderDetail);
               _ordersViewModel.fetchOrderDetails(widget.order.id);
+              // _productsViewModel.fetchProducts();
+              _checkStatusOrder();
+
+              context.showSnackBar("Successful scanning");
+
+              setState(() {});
             }
           }
         } else {

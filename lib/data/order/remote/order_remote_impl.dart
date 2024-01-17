@@ -8,17 +8,12 @@ class OrderRemoteImpl extends OrdersRepository {
   final _firestore = FirebaseFirestore.instance;
 
   @override
-  addNewOrder(OrderModel order, List<OrderDetail> orderDetails) {
-    //
-  }
-
-  @override
   deleteOrderDetail(OrderDetail detail) {
     //
   }
 
   @override
-  Future<List<OrderDetail>> getOrderDetails(int orderId) async {
+  Future<List<OrderDetail>> getOrderDetails(String orderId) async {
     List<OrderDetail> orders = [];
     await _firestore
         .collection("ordersDetails")
@@ -27,7 +22,7 @@ class OrderRemoteImpl extends OrdersRepository {
         .then((querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         for (var element in querySnapshot.docs) {
-          orders.add(OrderDetail.fromMap(element.data()));
+          orders.add(OrderDetail.fromFirestore(element.data(), element.id));
         }
       }
     });
@@ -40,7 +35,7 @@ class OrderRemoteImpl extends OrdersRepository {
     await _firestore.collection("orders").get().then((querySnapshot) {
       if (querySnapshot.docs.isNotEmpty) {
         for (var element in querySnapshot.docs) {
-          orders.add(OrderModel.fromMap(element.data()));
+          orders.add(OrderModel.fromMap(element.data(), element.id));
         }
       }
     });
@@ -48,7 +43,15 @@ class OrderRemoteImpl extends OrdersRepository {
   }
 
   @override
-  updateOrderDetail(OrderDetail detail) {
-    //
+  updateOrderDetail(OrderDetail detail) async {
+    await _firestore
+        .collection("ordersDetails")
+        .doc(detail.id)
+        .set(detail.toMap());
+  }
+
+  @override
+  updateOrder(OrderModel order) async {
+    await _firestore.collection("orders").doc(order.id).set(order.toMap());
   }
 }

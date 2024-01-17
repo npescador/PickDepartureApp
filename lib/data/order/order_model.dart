@@ -2,17 +2,10 @@
 //
 //     final orderModel = orderModelFromMap(jsonString);
 
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-OrderModel orderModelFromMap(String str) =>
-    OrderModel.fromMap(json.decode(str));
-
-String orderModelToMap(OrderModel data) => json.encode(data.toMap());
-
 class OrderModel {
-  int id;
+  String id;
   String orderCode;
   Timestamp createAt;
   String status;
@@ -24,7 +17,15 @@ class OrderModel {
     required this.status,
   });
 
-  factory OrderModel.fromMap(Map<String, dynamic> json) => OrderModel(
+  factory OrderModel.fromMap(Map<String, dynamic> json, String id) =>
+      OrderModel(
+        id: id,
+        orderCode: json["orderCode"],
+        createAt: json["createAt"],
+        status: json["status"],
+      );
+
+  factory OrderModel.fromLocalMap(Map<String, dynamic> json) => OrderModel(
         id: json["id"],
         orderCode: json["orderCode"],
         createAt: json["createAt"],
@@ -40,8 +41,8 @@ class OrderModel {
 }
 
 class OrderDetail {
-  int id;
-  int orderId;
+  String id;
+  String orderId;
   String productId;
   int amount;
   String description;
@@ -64,6 +65,29 @@ class OrderDetail {
         description: json["description"],
         pendingAmount: json["pendingAmount"],
       );
+
+  factory OrderDetail.fromFirestore(Map<String, dynamic> json, String id) =>
+      OrderDetail(
+        id: id,
+        orderId: json["orderId"],
+        productId: json["productId"],
+        amount: json["amount"],
+        description: json["description"],
+        pendingAmount: json["pendingAmount"],
+      );
+
+  factory OrderDetail.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> snapshot) {
+    Map<String, dynamic> data = snapshot.data()!;
+    return OrderDetail(
+      id: snapshot.id,
+      orderId: data["orderId"] ?? "",
+      productId: data["productId"] ?? "",
+      amount: data["amount"] ?? 0,
+      description: data["description"] ?? "",
+      pendingAmount: data["pendingAmount"] ?? 0,
+    );
+  }
 
   Map<String, dynamic> toMap() => {
         "id": id,
