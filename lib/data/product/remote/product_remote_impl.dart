@@ -6,8 +6,10 @@ import 'package:pick_departure_app/data/product/product_model.dart';
 class ProductRemoteImpl {
   final _firestore = FirebaseFirestore.instance;
 
-  addProduct(ProductModel product) {
-    //
+  addProduct(ProductModel product) async {
+    final docRef = _firestore.collection("products").doc();
+    product.id = docRef.id;
+    await docRef.set(product.toMap());
   }
 
   Future<ProductModel?> getProductByBarcode(String barcode) async {

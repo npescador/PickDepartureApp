@@ -15,7 +15,7 @@ class ProductDataImpl extends ProductsRepository {
 
   @override
   addProduct(ProductModel product) {
-    _localImpl.addProduct(product);
+    _remoteImpl.addProduct(product);
   }
 
   @override
@@ -40,6 +40,6 @@ class ProductDataImpl extends ProductsRepository {
 
   @override
   addProducts(List<ProductModel> products) {
-    _localImpl.addProducts(products);
+    _remoteImpl.addProducts(products);
   }
 }

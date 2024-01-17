@@ -7,5 +7,4 @@ abstract class OrdersRepository {
   Future<List<OrderDetail>> getOrderDetails(String orderId);
   updateOrderDetail(OrderDetail detail);
   updateOrder(OrderModel order);
-  deleteOrderDetail(OrderDetail detail);
 }

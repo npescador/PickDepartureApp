@@ -4,18 +4,11 @@ import 'package:pick_departure_app/data/order/remote/order_remote_impl.dart';
 import 'package:pick_departure_app/domain/orders_repository.dart';
 
 class OrderDataImpl extends OrdersRepository {
-  final OrderLocalImpl _localImpl;
   final OrderRemoteImpl _remoteImpl;
 
   OrderDataImpl(
       {required OrderLocalImpl localImpl, required OrderRemoteImpl remoteImpl})
-      : _localImpl = localImpl,
-        _remoteImpl = remoteImpl;
-
-  @override
-  deleteOrderDetail(OrderDetail detail) {
-    _localImpl.deleteOrderDetail(detail);
-  }
+      : _remoteImpl = remoteImpl;
 
   @override
   Future<List<OrderDetail>> getOrderDetails(String orderId) {

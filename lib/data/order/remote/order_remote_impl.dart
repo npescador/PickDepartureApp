@@ -8,11 +8,6 @@ class OrderRemoteImpl extends OrdersRepository {
   final _firestore = FirebaseFirestore.instance;
 
   @override
-  deleteOrderDetail(OrderDetail detail) {
-    //
-  }
-
-  @override
   Future<List<OrderDetail>> getOrderDetails(String orderId) async {
     List<OrderDetail> orders = [];
     await _firestore

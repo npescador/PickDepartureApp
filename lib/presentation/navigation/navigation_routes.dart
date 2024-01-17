@@ -1,7 +1,9 @@
 import 'package:go_router/go_router.dart';
+import 'package:pick_departure_app/data/order/order_model.dart';
 import 'package:pick_departure_app/presentation/view/authentication/login_page.dart';
 import 'package:pick_departure_app/presentation/view/home/home_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/new_order/new_order_page.dart';
+import 'package:pick_departure_app/presentation/view/orders/order_detail/order_detail_page.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/order_list_page.dart';
 import 'package:pick_departure_app/presentation/view/products/product_list_page.dart';
 import 'package:pick_departure_app/presentation/view/splash/splash_page.dart';
@@ -58,6 +60,11 @@ final GoRouter router = GoRouter(
               path: NavigationRoutes.ORDERS_ROUTE,
               builder: (context, state) => const OrderListPage(),
               routes: [
+                GoRoute(
+                  path: NavigationRoutes._ORDER_DETAIL_PATH,
+                  builder: (context, state) =>
+                      OrderDetailPage(order: state.extra as OrderModel),
+                ),
                 GoRoute(
                   path: NavigationRoutes._NEW_ORDER_PATH,
                   builder: (context, state) => NewOrderPage(

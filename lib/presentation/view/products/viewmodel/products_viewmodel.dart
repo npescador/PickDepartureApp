@@ -48,10 +48,6 @@ class ProductsViewModel extends BaseViewModel {
     //         (error) => getProductBarcodeState.add(ResourceState.error(error)));
   }
 
-  sincronizeProductsToLocal() {
-    _productsRepository.getRemoteProducts().then((value) => addProducts(value));
-  }
-
   updateProduct(ProductModel product) {
     _productsRepository.updateProduct(product);
 
