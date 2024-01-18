@@ -118,11 +118,14 @@ class _OrderListPageState extends State<OrderListPage>
                         curve: Curves.fastOutSlowIn)));
             animationController.forward();
             return CustomListView(
-              callback: () {
-                context
-                    .push(NavigationRoutes.ORDER_DETAIL_ROUTE,
-                        extra: _orders[index])
-                    .then((value) => _ordersViewModel.fetchOrders());
+              callback: () async {
+                await context.push(NavigationRoutes.ORDER_DETAIL_ROUTE,
+                    extra: _orders[index]);
+                _ordersViewModel.fetchOrders();
+                // context
+                //     .push(NavigationRoutes.ORDER_DETAIL_ROUTE,
+                //         extra: _orders[index])
+                //     .then((value) => _ordersViewModel.fetchOrders());
 
                 //context.go(NavigationRoutes.ORDER_DETAIL_ROUTE,extra: _orders[index]);
               },
