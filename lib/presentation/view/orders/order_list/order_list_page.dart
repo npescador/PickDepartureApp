@@ -11,7 +11,7 @@ import 'package:pick_departure_app/presentation/view/orders/order_list/viewmodel
 import 'package:pick_departure_app/presentation/widget/custom_body_view.dart';
 import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
-import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
+import 'package:pick_departure_app/presentation/widget/loading/loading_overlay.dart';
 import 'package:pick_departure_app/presentation/widget/order/order_row_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -40,16 +40,16 @@ class _OrderListPageState extends State<OrderListPage>
     _ordersViewModel.getOrdersState.stream.listen((state) {
       switch (state.status) {
         case Status.LOADING:
-          LoadingView.show(context);
+          LoadingOverlay.show(context);
           break;
         case Status.SUCCESS:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           setState(() {
             _orders = state.data!;
           });
           break;
         case Status.ERROR:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           ErrorView.show(context, state.exception!.toString(), () {
             _ordersViewModel.fetchOrders();
           });
@@ -82,18 +82,18 @@ class _OrderListPageState extends State<OrderListPage>
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.logout_outlined,
-            color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.logout_outlined,
+              color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+            ),
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setBool("isLoggedIn", false);
+              context.pushReplacement(NavigationRoutes.LOGIN_ROUTE);
+            },
           ),
-          onPressed: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setBool("isLoggedIn", false);
-            context.pushReplacement(NavigationRoutes.LOGIN_ROUTE);
-          },
-        ),
-        actions: const [
           // IconButton(
           //   icon: const Icon(Icons.add),
           //   onPressed: () => {

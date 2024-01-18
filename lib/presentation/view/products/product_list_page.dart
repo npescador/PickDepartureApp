@@ -15,7 +15,7 @@ import 'package:pick_departure_app/presentation/search/product_search_delegate.d
 import 'package:pick_departure_app/presentation/view/products/viewmodel/products_viewmodel.dart';
 import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
-import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
+import 'package:pick_departure_app/presentation/widget/loading/loading_overlay.dart';
 import 'package:pick_departure_app/presentation/widget/product/product_row_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -48,16 +48,16 @@ class _ProductsListPageState extends State<ProductsListPage>
     _productsViewModel.getProductsState.stream.listen((state) {
       switch (state.status) {
         case Status.LOADING:
-          LoadingView.show(context);
+          LoadingOverlay.show(context);
           break;
         case Status.SUCCESS:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           setState(() {
             _products = state.data!;
           });
           break;
         case Status.ERROR:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           ErrorView.show(context, state.exception!.toString(), () {
             _productsViewModel.fetchProducts();
           });
@@ -89,17 +89,6 @@ class _ProductsListPageState extends State<ProductsListPage>
               fontSize: 22,
             )),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.logout_outlined,
-            color: AppTheme2.buildLightTheme().secondaryHeaderColor,
-          ),
-          onPressed: () async {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setBool("isLoggedIn", false);
-            context.pushReplacementNamed(NavigationRoutes.LOGIN_ROUTE);
-          },
-        ),
         actions: [
           IconButton(
             icon: Icon(
@@ -119,7 +108,18 @@ class _ProductsListPageState extends State<ProductsListPage>
                     animationController: animationController),
               );
             },
-          )
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.logout_outlined,
+              color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+            ),
+            onPressed: () async {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              await prefs.setBool("isLoggedIn", false);
+              context.pushReplacementNamed(NavigationRoutes.LOGIN_ROUTE);
+            },
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(

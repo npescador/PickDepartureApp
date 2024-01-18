@@ -14,7 +14,7 @@ import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/authentication/viewmodel/user_viewmodel.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
-import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
+import 'package:pick_departure_app/presentation/widget/loading/loading_overlay.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -41,10 +41,10 @@ class _LoginPageState extends State<LoginPage> {
     _userViewModel.getUsersEmailPasswordState.stream.listen((state) {
       switch (state.status) {
         case Status.LOADING:
-          LoadingView.show(context);
+          LoadingOverlay.show(context);
           break;
         case Status.SUCCESS:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           setState(() {
             _user = state.data;
 
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
           });
           break;
         case Status.ERROR:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           ErrorView.show(context, state.exception!.toString(), () {
             _userViewModel.fetchUserByEmailPassword(
                 _controllerUsername.text, _controllerPassword.text);
@@ -69,10 +69,10 @@ class _LoginPageState extends State<LoginPage> {
     _userViewModel.getUsersBarcodeState.stream.listen((state) {
       switch (state.status) {
         case Status.LOADING:
-          LoadingView.show(context);
+          LoadingOverlay.show(context);
           break;
         case Status.SUCCESS:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           setState(() {
             _user = state.data;
 
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
           });
           break;
         case Status.ERROR:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           ErrorView.show(context, state.exception!.toString(), () {
             _userViewModel.fetchUserByBarcode(_userBarcode);
           });

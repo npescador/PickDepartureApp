@@ -11,7 +11,7 @@ import 'package:pick_departure_app/presentation/view/authentication/viewmodel/us
 import 'package:pick_departure_app/presentation/widget/custom_body_view.dart';
 import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/error/error_view.dart';
-import 'package:pick_departure_app/presentation/widget/loading/loading_view.dart';
+import 'package:pick_departure_app/presentation/widget/loading/loading_overlay.dart';
 import 'package:pick_departure_app/presentation/widget/user/user_row_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,16 +39,16 @@ class _UsersListPageState extends State<UsersListPage>
     _usersViewModel.getUsersState.stream.listen((state) {
       switch (state.status) {
         case Status.LOADING:
-          LoadingView.show(context);
+          LoadingOverlay.show(context);
           break;
         case Status.SUCCESS:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           setState(() {
             _users = state.data!;
           });
           break;
         case Status.ERROR:
-          LoadingView.hide();
+          LoadingOverlay.hide();
           ErrorView.show(context, state.exception!.toString(), () {
             _usersViewModel.fetchUsers();
           });
@@ -78,17 +78,19 @@ class _UsersListPageState extends State<UsersListPage>
                 fontSize: 22,
               )),
           centerTitle: true,
-          leading: IconButton(
-            icon: Icon(
-              Icons.logout_outlined,
-              color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.logout_outlined,
+                color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+              ),
+              onPressed: () async {
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setBool("isLoggedIn", false);
+                context.pushReplacementNamed(NavigationRoutes.LOGIN_ROUTE);
+              },
             ),
-            onPressed: () async {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.setBool("isLoggedIn", false);
-              context.pushReplacementNamed(NavigationRoutes.LOGIN_ROUTE);
-            },
-          ),
+          ],
         ),
         body: CustomBodyView(
           scrollController: _scrollController,
