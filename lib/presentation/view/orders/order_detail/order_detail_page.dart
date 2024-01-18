@@ -10,7 +10,7 @@ import 'package:pick_departure_app/common/extensions/extensions.dart';
 import 'package:pick_departure_app/data/order/order_model.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/viewmodel/orders_viewmodel.dart';
@@ -81,7 +81,7 @@ class _OrderDetailPageState extends State<OrderDetailPage>
         _showScanButton = true;
         break;
       case "Completed":
-        _orderStatusColor = AppTheme2.buildLightTheme().primaryColor;
+        _orderStatusColor = AppTheme.buildLightTheme().primaryColor;
         _showScanButton = false;
         break;
     }
@@ -100,7 +100,7 @@ class _OrderDetailPageState extends State<OrderDetailPage>
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: AppTheme2.buildLightTheme().primaryColor,
+        backgroundColor: AppTheme.buildLightTheme().primaryColor,
         title: Text(
           "Order ${widget.order.orderCode}",
           style: const TextStyle(
@@ -113,7 +113,7 @@ class _OrderDetailPageState extends State<OrderDetailPage>
           IconButton(
             icon: Icon(
               Icons.logout_outlined,
-              color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+              color: AppTheme.buildLightTheme().secondaryHeaderColor,
             ),
             onPressed: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -126,10 +126,10 @@ class _OrderDetailPageState extends State<OrderDetailPage>
       floatingActionButton: Visibility(
         visible: _showScanButton,
         child: FloatingActionButton(
-          backgroundColor: AppTheme2.buildLightTheme().dialogBackgroundColor,
+          backgroundColor: AppTheme.buildLightTheme().dialogBackgroundColor,
           child: Icon(
             MdiIcons.barcodeScan,
-            color: AppTheme2.buildLightTheme().primaryColor,
+            color: AppTheme.buildLightTheme().primaryColor,
           ),
           onPressed: () {
             _scan();
@@ -211,7 +211,7 @@ class _OrderDetailPageState extends State<OrderDetailPage>
         _details.every((element) => element.pendingAmount == 0);
     if (allDetailsPendinAmountZero) {
       widget.order.status = "Completed";
-      _orderStatusColor = AppTheme2.buildLightTheme().primaryColor;
+      _orderStatusColor = AppTheme.buildLightTheme().primaryColor;
       _showScanButton = false;
     } else if (_details
         .any((element) => element.amount != element.pendingAmount)) {

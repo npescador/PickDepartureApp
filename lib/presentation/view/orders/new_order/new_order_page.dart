@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pick_departure_app/common/extensions/extensions.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 
 class NewOrderPage extends StatefulWidget {
   const NewOrderPage({super.key, required this.saveOrder});
@@ -38,7 +38,7 @@ class _NewOrderPageState extends State<NewOrderPage>
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme2.buildLightTheme().primaryColor,
+        backgroundColor: AppTheme.buildLightTheme().primaryColor,
         title: const Text(
           "New Order",
           style: TextStyle(
@@ -57,14 +57,14 @@ class _NewOrderPageState extends State<NewOrderPage>
             child: Row(
               children: [
                 Icon(Icons.save,
-                    color: AppTheme2.buildLightTheme().secondaryHeaderColor),
+                    color: AppTheme.buildLightTheme().secondaryHeaderColor),
                 const SizedBox(
                   width: 2,
                 ),
                 Text("Save",
                     style: TextStyle(
                         color:
-                            AppTheme2.buildLightTheme().secondaryHeaderColor)),
+                            AppTheme.buildLightTheme().secondaryHeaderColor)),
               ],
             ),
           ),
@@ -73,7 +73,7 @@ class _NewOrderPageState extends State<NewOrderPage>
       body: SafeArea(
         child: Material(
           child: Theme(
-            data: AppTheme2.buildLightTheme(),
+            data: AppTheme.buildLightTheme(),
             child: Stack(
               children: [
                 InkWell(
@@ -94,7 +94,7 @@ class _NewOrderPageState extends State<NewOrderPage>
                           },
                           controller: scrollController,
                           body: Container(
-                            color: AppTheme2.buildLightTheme()
+                            color: AppTheme.buildLightTheme()
                                 .colorScheme
                                 .background,
                             child: Form(
@@ -117,7 +117,7 @@ class _NewOrderPageState extends State<NewOrderPage>
                                                     BorderRadius.circular(12),
                                                 border: Border.all(
                                                     width: 2,
-                                                    color: AppTheme2
+                                                    color: AppTheme
                                                             .buildLightTheme()
                                                         .primaryColor),
                                                 color: Colors.transparent),
@@ -167,7 +167,7 @@ class _NewOrderPageState extends State<NewOrderPage>
                                                     BorderRadius.circular(12),
                                                 border: Border.all(
                                                     width: 2,
-                                                    color: AppTheme2
+                                                    color: AppTheme
                                                             .buildLightTheme()
                                                         .primaryColor),
                                                 color: Colors.transparent),
@@ -210,7 +210,7 @@ class _NewOrderPageState extends State<NewOrderPage>
                                                     BorderRadius.circular(12),
                                                 border: Border.all(
                                                     width: 2,
-                                                    color: AppTheme2
+                                                    color: AppTheme
                                                             .buildLightTheme()
                                                         .primaryColor),
                                                 color: Colors.transparent),
@@ -237,7 +237,7 @@ class _NewOrderPageState extends State<NewOrderPage>
                                                 prefixIcon: IconButton(
                                                   icon: Icon(
                                                       Icons.search_rounded,
-                                                      color: AppTheme2
+                                                      color: AppTheme
                                                               .buildLightTheme()
                                                           .primaryColor),
                                                   onPressed: () {

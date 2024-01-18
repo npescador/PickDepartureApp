@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.navigationShell});
@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Colors.black,
         unselectedItemColor: Colors.grey,
-        backgroundColor: AppTheme2.buildLightTheme().primaryColor,
+        backgroundColor: AppTheme.buildLightTheme().primaryColor,
         type: BottomNavigationBarType.fixed,
         currentIndex: widget.navigationShell.currentIndex,
         onTap: (index) {

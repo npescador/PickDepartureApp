@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pick_departure_app/data/order/order_model.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 
 class OrderDetailRowItem extends StatelessWidget {
   const OrderDetailRowItem({super.key, required this.orderDetail});
@@ -14,7 +14,7 @@ class OrderDetailRowItem extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0),
       ),
-      color: AppTheme2.buildLightTheme().colorScheme.background,
+      color: AppTheme.buildLightTheme().colorScheme.background,
       child: Align(
         alignment: Alignment.center,
         child: Padding(
@@ -40,7 +40,7 @@ class OrderDetailRowItem extends StatelessWidget {
                 children: [
                   Icon(
                     MdiIcons.packageVariant,
-                    color: AppTheme2.buildLightTheme().primaryColor,
+                    color: AppTheme.buildLightTheme().primaryColor,
                   ),
                   const SizedBox(
                     width: 4,

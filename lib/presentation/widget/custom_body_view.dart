@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 
 class CustomBodyView extends StatelessWidget {
   const CustomBodyView({
@@ -16,7 +16,7 @@ class CustomBodyView extends StatelessWidget {
     return SafeArea(
       child: Material(
         child: Theme(
-          data: AppTheme2.buildLightTheme(),
+          data: AppTheme.buildLightTheme(),
           child: Stack(
             children: [
               InkWell(
@@ -37,9 +37,8 @@ class CustomBodyView extends StatelessWidget {
                         },
                         controller: scrollController,
                         body: Container(
-                          color: AppTheme2.buildLightTheme()
-                              .colorScheme
-                              .background,
+                          color:
+                              AppTheme.buildLightTheme().colorScheme.background,
                           child: bodyChildWidget,
                         ),
                       ),

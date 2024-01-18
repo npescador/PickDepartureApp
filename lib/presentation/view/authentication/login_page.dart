@@ -8,7 +8,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:pick_departure_app/common/extensions/extensions.dart';
 import 'package:pick_departure_app/data/users/user_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 import 'package:pick_departure_app/presentation/constants/validations_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const SizedBox(height: 50),
               Icon(Icons.person_pin,
-                  size: 252, color: AppTheme2.buildLightTheme().primaryColor),
+                  size: 252, color: AppTheme.buildLightTheme().primaryColor),
               Text(
                 "Login to your account",
                 style: Theme.of(context).textTheme.headlineLarge,
@@ -120,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: "Email",
                   suffixIcon: Icon(
                     Icons.person_outline,
-                    color: AppTheme2.buildLightTheme().primaryColor,
+                    color: AppTheme.buildLightTheme().primaryColor,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -155,11 +155,11 @@ class _LoginPageState extends State<LoginPage> {
                     icon: isObscure
                         ? Icon(
                             Icons.visibility_outlined,
-                            color: AppTheme2.buildLightTheme().primaryColor,
+                            color: AppTheme.buildLightTheme().primaryColor,
                           )
                         : Icon(
                             Icons.visibility_off_outlined,
-                            color: AppTheme2.buildLightTheme().primaryColor,
+                            color: AppTheme.buildLightTheme().primaryColor,
                           ),
                   ),
                   border: OutlineInputBorder(
@@ -199,7 +199,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           icon: const Icon(Icons.login),
-                          backgroundColor: AppTheme2.buildLightTheme()
+                          backgroundColor: AppTheme.buildLightTheme()
                               .primaryColor, // Puedes ajustar el color según tus preferencias
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
@@ -217,10 +217,10 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         elevation: 5.0,
                         backgroundColor:
-                            AppTheme2.buildLightTheme().dialogBackgroundColor,
+                            AppTheme.buildLightTheme().dialogBackgroundColor,
                         child: Icon(
                           MdiIcons.barcodeScan,
-                          color: AppTheme2.buildLightTheme().primaryColor,
+                          color: AppTheme.buildLightTheme().primaryColor,
                         ),
                         onPressed: () {
                           _scanAndCheckLogin();

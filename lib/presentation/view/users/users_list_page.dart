@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pick_departure_app/data/users/user_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/authentication/viewmodel/user_viewmodel.dart';
@@ -71,7 +71,7 @@ class _UsersListPageState extends State<UsersListPage>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppTheme2.buildLightTheme().primaryColor,
+          backgroundColor: AppTheme.buildLightTheme().primaryColor,
           title: const Text("Users",
               style: TextStyle(
                 fontWeight: FontWeight.w600,
@@ -82,7 +82,7 @@ class _UsersListPageState extends State<UsersListPage>
             IconButton(
               icon: Icon(
                 Icons.logout_outlined,
-                color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+                color: AppTheme.buildLightTheme().secondaryHeaderColor,
               ),
               onPressed: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -95,7 +95,7 @@ class _UsersListPageState extends State<UsersListPage>
         body: CustomBodyView(
           scrollController: _scrollController,
           bodyChildWidget: Container(
-            color: AppTheme2.buildLightTheme().colorScheme.background,
+            color: AppTheme.buildLightTheme().colorScheme.background,
             child: ListView.builder(
               itemCount: _users.length,
               padding: const EdgeInsets.only(top: 8),

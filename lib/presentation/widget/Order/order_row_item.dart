@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pick_departure_app/data/order/order_model.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 
 class OrderRowItem extends StatelessWidget {
   const OrderRowItem({super.key, required this.order});
@@ -19,7 +19,7 @@ class OrderRowItem extends StatelessWidget {
         orderStatusColor = Colors.amber;
         break;
       case "Completed":
-        orderStatusColor = AppTheme2.buildLightTheme().primaryColor;
+        orderStatusColor = AppTheme.buildLightTheme().primaryColor;
         break;
     }
 
@@ -36,7 +36,7 @@ class OrderRowItem extends StatelessWidget {
               borderRadius:
                   BorderRadius.circular(16.0), // Radio de la esquina del card
             ),
-            color: AppTheme2.buildLightTheme().colorScheme.background,
+            color: AppTheme.buildLightTheme().colorScheme.background,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,

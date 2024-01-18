@@ -2,7 +2,7 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 
 class ProductRowItem extends StatelessWidget {
   const ProductRowItem({super.key, required this.product});
@@ -18,7 +18,7 @@ class ProductRowItem extends StatelessWidget {
           Column(
             children: [
               Container(
-                color: AppTheme2.buildLightTheme().colorScheme.background,
+                color: AppTheme.buildLightTheme().colorScheme.background,
                 padding: const EdgeInsets.only(
                     left: 48, right: 48, top: 16, bottom: 8),
                 child: AspectRatio(
@@ -32,7 +32,7 @@ class ProductRowItem extends StatelessWidget {
                 ),
               ),
               Container(
-                color: AppTheme2.buildLightTheme().colorScheme.background,
+                color: AppTheme.buildLightTheme().colorScheme.background,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,8 +72,8 @@ class ProductRowItem extends StatelessWidget {
                                 children: [
                                   Icon(
                                     MdiIcons.packageVariant,
-                                    color: AppTheme2.buildLightTheme()
-                                        .primaryColor,
+                                    color:
+                                        AppTheme.buildLightTheme().primaryColor,
                                   ),
                                   const SizedBox(
                                     width: 4,

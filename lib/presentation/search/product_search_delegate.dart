@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 import 'package:pick_departure_app/presentation/widget/custom_list_view.dart';
 import 'package:pick_departure_app/presentation/widget/product/product_row_item.dart';
 
@@ -83,7 +83,7 @@ class ProductSearchDelegate extends SearchDelegate {
         style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w600,
-            color: AppTheme2.buildLightTheme().primaryColor),
+            color: AppTheme.buildLightTheme().primaryColor),
       ));
     }
   }

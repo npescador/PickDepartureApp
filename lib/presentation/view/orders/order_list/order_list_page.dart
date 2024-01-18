@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pick_departure_app/data/order/order_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/view/orders/order_list/viewmodel/orders_viewmodel.dart';
@@ -73,7 +73,7 @@ class _OrderListPageState extends State<OrderListPage>
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: AppTheme2.buildLightTheme().primaryColor,
+        backgroundColor: AppTheme.buildLightTheme().primaryColor,
         title: const Text(
           "Orders",
           style: TextStyle(
@@ -86,7 +86,7 @@ class _OrderListPageState extends State<OrderListPage>
           IconButton(
             icon: Icon(
               Icons.logout_outlined,
-              color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+              color: AppTheme.buildLightTheme().secondaryHeaderColor,
             ),
             onPressed: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();

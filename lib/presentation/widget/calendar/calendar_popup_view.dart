@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 import 'package:pick_departure_app/presentation/widget/calendar/custom_calendar.dart';
 
 class CalendarPopupView extends StatefulWidget {
@@ -74,7 +74,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                   padding: const EdgeInsets.all(24.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppTheme2.buildLightTheme().colorScheme.background,
+                      color: AppTheme.buildLightTheme().colorScheme.background,
                       borderRadius:
                           const BorderRadius.all(Radius.circular(24.0)),
                       boxShadow: <BoxShadow>[
@@ -119,7 +119,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                             Container(
                               height: 74,
                               width: 1,
-                              color: AppTheme2.buildLightTheme().dividerColor,
+                              color: AppTheme.buildLightTheme().dividerColor,
                             ),
                             Expanded(
                               child: Column(
@@ -166,7 +166,7 @@ class _CalendarPopupViewState extends State<CalendarPopupView>
                           child: Container(
                             height: 48,
                             decoration: BoxDecoration(
-                              color: AppTheme2.buildLightTheme().primaryColor,
+                              color: AppTheme.buildLightTheme().primaryColor,
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(24.0)),
                               boxShadow: <BoxShadow>[

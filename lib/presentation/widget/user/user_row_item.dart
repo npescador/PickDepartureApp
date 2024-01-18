@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:pick_departure_app/data/users/user_model.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class UserRowItem extends StatelessWidget {
@@ -18,7 +18,7 @@ class UserRowItem extends StatelessWidget {
           Column(
             children: [
               Container(
-                color: AppTheme2.buildLightTheme().colorScheme.background,
+                color: AppTheme.buildLightTheme().colorScheme.background,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,8 +61,8 @@ class UserRowItem extends StatelessWidget {
                                 children: [
                                   Icon(
                                     MdiIcons.phone,
-                                    color: AppTheme2.buildLightTheme()
-                                        .primaryColor,
+                                    color:
+                                        AppTheme.buildLightTheme().primaryColor,
                                   ),
                                   const SizedBox(
                                     width: 4,

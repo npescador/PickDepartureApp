@@ -8,7 +8,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:pick_departure_app/common/extensions/extensions.dart';
 import 'package:pick_departure_app/data/product/product_model.dart';
 import 'package:pick_departure_app/di/app_modules.dart';
-import 'package:pick_departure_app/presentation/constants/them2_constants.dart';
+import 'package:pick_departure_app/presentation/constants/app_theme_constants.dart';
 import 'package:pick_departure_app/presentation/model/resource_state.dart';
 import 'package:pick_departure_app/presentation/navigation/navigation_routes.dart';
 import 'package:pick_departure_app/presentation/search/product_search_delegate.dart';
@@ -82,7 +82,7 @@ class _ProductsListPageState extends State<ProductsListPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppTheme2.buildLightTheme().primaryColor,
+        backgroundColor: AppTheme.buildLightTheme().primaryColor,
         title: const Text("Products",
             style: TextStyle(
               fontWeight: FontWeight.w600,
@@ -93,7 +93,7 @@ class _ProductsListPageState extends State<ProductsListPage>
           IconButton(
             icon: Icon(
               Icons.search_rounded,
-              color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+              color: AppTheme.buildLightTheme().secondaryHeaderColor,
             ),
             onPressed: () {
               showSearch(
@@ -112,7 +112,7 @@ class _ProductsListPageState extends State<ProductsListPage>
           IconButton(
             icon: Icon(
               Icons.logout_outlined,
-              color: AppTheme2.buildLightTheme().secondaryHeaderColor,
+              color: AppTheme.buildLightTheme().secondaryHeaderColor,
             ),
             onPressed: () async {
               SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -123,10 +123,10 @@ class _ProductsListPageState extends State<ProductsListPage>
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppTheme2.buildLightTheme().dialogBackgroundColor,
+        backgroundColor: AppTheme.buildLightTheme().dialogBackgroundColor,
         child: Icon(
           MdiIcons.barcodeScan,
-          color: AppTheme2.buildLightTheme().primaryColor,
+          color: AppTheme.buildLightTheme().primaryColor,
         ),
         onPressed: () {
           _scan();
@@ -135,7 +135,7 @@ class _ProductsListPageState extends State<ProductsListPage>
       body: SafeArea(
         child: Material(
           child: Theme(
-            data: AppTheme2.buildLightTheme(),
+            data: AppTheme.buildLightTheme(),
             child: Stack(
               children: [
                 InkWell(
@@ -151,7 +151,8 @@ class _ProductsListPageState extends State<ProductsListPage>
                       Visibility(
                         visible: _showNewProductForm,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                          padding: const EdgeInsets.only(
+                              left: 24.0, right: 24.0, top: 32),
                           child: Column(
                             children: [
                               Text(_result),
@@ -229,7 +230,7 @@ class _ProductsListPageState extends State<ProductsListPage>
                             },
                             controller: _scrollController,
                             body: Container(
-                              color: AppTheme2.buildLightTheme()
+                              color: AppTheme.buildLightTheme()
                                   .colorScheme
                                   .background,
                               child: ListView.builder(
